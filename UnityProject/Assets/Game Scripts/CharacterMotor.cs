@@ -325,10 +325,10 @@ public class CharacterMotor : MonoBehaviour
 		// We were not grounded but just landed on something
 		else if (!grounded && IsGroundedTest()) {
 			if(old_vel.y < -8.0f){
-				GetComponent(AimScript).FallDeath(old_vel);
+				GetComponent<AimScript>().FallDeath(old_vel);
 			} else if(old_vel.y < 0.0f){
-				Tools.PlaySoundFromGroup(sound_footstep_jump_concrete, Mathf.Min(old_vel.y / -4.0f, 1.0f));
-				GetComponent(AimScript).StepRecoil(-old_vel.y * 0.1f);
+				this.PlaySoundFromGroup(sound_footstep_jump_concrete, Mathf.Min(old_vel.y / -4.0f, 1.0f));
+				GetComponent<AimScript>().StepRecoil(-old_vel.y * 0.1f);
 			}
 			height_spring.vel = old_vel.y;
 			grounded = true;
@@ -391,11 +391,11 @@ public class CharacterMotor : MonoBehaviour
 	
 	void Update () {
 		if(PlayerPrefs.GetInt("toggle_crouch", 1)==1){
-			if(!GetComponent(AimScript).IsDead() && Input.GetButtonDown("Crouch Toggle")){
+			if(!GetComponent<AimScript>().IsDead() && Input.GetButtonDown("Crouch Toggle")){
 				crouching = !crouching;
 			}
 		} else {
-			if(!GetComponent(AimScript).IsDead()){
+			if(!GetComponent<AimScript>().IsDead()){
 				crouching = Input.GetButton("Crouch Toggle");
 			}
 		}	
@@ -452,23 +452,23 @@ public class CharacterMotor : MonoBehaviour
 				step_timer -= Time.deltaTime * step_speed;
 				if(step_timer < 0.0f){
 					if(crouching){
-						Tools.PlaySoundFromGroup(sound_footstep_crouchwalk_concrete, step_volume);
+						this.PlaySoundFromGroup(sound_footstep_crouchwalk_concrete, step_volume);
 					} else if(running > 0.0f){
-						Tools.PlaySoundFromGroup(sound_footstep_run_concrete, step_volume);
+						this.PlaySoundFromGroup(sound_footstep_run_concrete, step_volume);
 					} else {
-						Tools.PlaySoundFromGroup(sound_footstep_walk_concrete, step_volume);					
+						this.PlaySoundFromGroup(sound_footstep_walk_concrete, step_volume);					
 					}
-					GetComponent(AimScript).StepRecoil(step_volume/kSoundVolumeMult);
+					GetComponent<AimScript>().StepRecoil(step_volume/kSoundVolumeMult);
 					step_timer = 1.0f;
 				}
 			} else if(desiredVelocity.magnitude == 0.0f && velocity.magnitude < 0.01f){
 				if(step_timer < 0.8f && step_timer != 0.5f){
 					if(crouching){
-						Tools.PlaySoundFromGroup(sound_footstep_crouchwalk_concrete, step_volume);
+						this.PlaySoundFromGroup(sound_footstep_crouchwalk_concrete, step_volume);
 					} else {
-						Tools.PlaySoundFromGroup(sound_footstep_walk_concrete, step_volume);					
+						this.PlaySoundFromGroup(sound_footstep_walk_concrete, step_volume);					
 					}
-					GetComponent(AimScript).StepRecoil(step_volume/kSoundVolumeMult);
+					GetComponent<AimScript>().StepRecoil(step_volume/kSoundVolumeMult);
 				}
 				step_timer = 0.5f;
 			}
@@ -542,7 +542,7 @@ public class CharacterMotor : MonoBehaviour
 			// and if they hit the button a fraction of a second too soon and no new jump happens as a consequence,
 			// it's confusing and it feels like the game is buggy.
 			if (jumping.enabled && canControl && (Time.time - jumping.lastButtonDownTime < 0.2f)) {
-				Tools.PlaySoundFromGroup(sound_footstep_run_concrete, 1.0f);
+				this.PlaySoundFromGroup(sound_footstep_run_concrete, 1.0f);
 				step_timer = 0.0f;
 				crouching = false;
 				grounded = false;
@@ -622,7 +622,7 @@ public class CharacterMotor : MonoBehaviour
 	}
 	
 	private void GetDesiredHorizontalVelocity () {
-		if(GetComponent(AimScript).IsDead()){
+		if(GetComponent<AimScript>().IsDead()){
 			return die_dir;
 		}
 		

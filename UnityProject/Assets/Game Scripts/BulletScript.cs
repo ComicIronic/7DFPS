@@ -31,12 +31,12 @@ public class BulletScript : MonoBehaviour
 	
 	void SetHostile() {
 		audio.rolloffMode = AudioRolloffMode.Logarithmic;
-		Tools.PlaySoundFromGroup(sound_flyby, 0.4f);
+		this.PlaySoundFromGroup(sound_flyby, 0.4f);
 		hostile = true;
 	}
 	
 	void Start () {
-		line_renderer = GetComponent(LineRenderer);
+		line_renderer = GetComponent<LineRenderer>();
 		line_renderer.SetPosition(0, transform.position);
 		line_renderer.SetPosition(1, transform.position);
 		old_pos = transform.position;
@@ -64,8 +64,8 @@ public class BulletScript : MonoBehaviour
 					var ricochet_vel = velocity * 0.3f * (1.0f-ricochet_amount);
 					velocity -= ricochet_vel;
 					ricochet_vel = Vector3.Reflect(ricochet_vel, hit.normal);
-					ricochet.GetComponent(BulletScript).SetVelocity(ricochet_vel);
-					Tools.PlaySoundFromGroup(sound_hit_ricochet, hostile ? 1.0f : 0.6f);
+					ricochet.GetComponent<BulletScript>().SetVelocity(ricochet_vel);
+					this.PlaySoundFromGroup(sound_hit_ricochet, hostile ? 1.0f : 0.6f);
 				} else if(turret_script && velocity.magnitude > 100.0f){
 					RaycastHit new_hit;
 					if(Physics.Linecast(hit.point + velocity.normalized * 0.001f, hit.point + velocity.normalized, new_hit, 1<<11 | 1<<12)){
@@ -80,32 +80,32 @@ public class BulletScript : MonoBehaviour
 				if(light_script){
 					light_script.WasShot(hit_obj, hit.point, velocity);
 					if(hit.collider.material.name == "glass (Instance)"){
-						Tools.PlaySoundFromGroup(sound_glass_break, 1.0f);
+						this.PlaySoundFromGroup(sound_glass_break, 1.0f);
 					}
 				}
 				if(Vector3.Magnitude(velocity) > 50){
 					GameObject hole;
 					GameObject effect;
 					if(turret_script){
-						Tools.PlaySoundFromGroup(sound_hit_metal, hostile ? 1.0f : 0.8f);
+						this.PlaySoundFromGroup(sound_hit_metal, hostile ? 1.0f : 0.8f);
 						hole = Instantiate(metal_bullet_hole_obj, hit.point, RandomOrientation());
 						effect = Instantiate(spark_effect, hit.point, RandomOrientation());
 						turret_script.WasShot(hit_obj, hit.point, velocity);
 					} else if(aim_script){
 						hole = Instantiate(bullet_hole_obj, hit.point, RandomOrientation());
 						effect = Instantiate(puff_effect, hit.point, RandomOrientation());
-						Tools.PlaySoundFromGroup(sound_hit_body, 1.0f);
+						this.PlaySoundFromGroup(sound_hit_body, 1.0f);
 						aim_script.WasShot();
 					} else if(hit.collider.material.name == "metal (Instance)"){
-						Tools.PlaySoundFromGroup(sound_hit_metal, hostile ? 1.0f : 0.4f);
+						this.PlaySoundFromGroup(sound_hit_metal, hostile ? 1.0f : 0.4f);
 						hole = Instantiate(metal_bullet_hole_obj, hit.point, RandomOrientation());
 						effect = Instantiate(spark_effect, hit.point, RandomOrientation());
 					} else if(hit.collider.material.name == "glass (Instance)"){
-						Tools.PlaySoundFromGroup(sound_hit_glass, hostile ? 1.0f : 0.4f);
+						this.PlaySoundFromGroup(sound_hit_glass, hostile ? 1.0f : 0.4f);
 						hole = Instantiate(glass_bullet_hole_obj, hit.point, RandomOrientation());
 						effect = Instantiate(spark_effect, hit.point, RandomOrientation());
 					} else {
-						Tools.PlaySoundFromGroup(sound_hit_concrete, hostile ? 1.0f : 0.4f);
+						this.PlaySoundFromGroup(sound_hit_concrete, hostile ? 1.0f : 0.4f);
 						hole = Instantiate(bullet_hole_obj, hit.point, RandomOrientation());
 						effect = Instantiate(puff_effect, hit.point, RandomOrientation());
 					}

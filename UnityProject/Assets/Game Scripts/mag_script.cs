@@ -45,7 +45,7 @@ private void Start () {
 
 void Update() {
 			switch (mag_load_stage) {
-			case MagLoadStage.PUSHING_DOWN:
+			case MagLoadStage.AddING_DOWN:
 					mag_load_progress += Time.deltaTime * 20.0f;
 					if (mag_load_progress >= 1.0f) {
 							mag_load_stage = MagLoadStage.ADDING_ROUND;
@@ -64,13 +64,13 @@ void Update() {
 							}
 					}
 					break;
-			case MagLoadStage.PUSHING_UP:
+			case MagLoadStage.AddING_UP:
 					mag_load_progress += Time.deltaTime * 20.0f;
 					if (mag_load_progress >= 1.0f) {
 							mag_load_stage = MagLoadStage.NONE;
 							mag_load_progress = 0.0f;
 							RemoveRound ();
-							for (i=0; i<num_rounds; ++i) {
+							for(int i=0; i<num_rounds; ++i) {
 									obj = transform.FindChild ("round_" + (i + 1));
 									obj.localPosition = round_pos [i];
 									obj.localRotation = round_rot [i];
@@ -80,7 +80,7 @@ void Update() {
 			case MagLoadStage.REMOVING_ROUND:
 					mag_load_progress += Time.deltaTime * 20.0f;
 					if (mag_load_progress >= 1.0f) {
-							mag_load_stage = MagLoadStage.PUSHING_UP;
+							mag_load_stage = MagLoadStage.AddING_UP;
 							mag_load_progress = 0.0f;
 					}
 					break;
@@ -90,7 +90,7 @@ void Update() {
 					mag_load_progress_display = Mathf.Floor (mag_load_progress + 0.5f);
 			}
 			switch (mag_load_stage) {
-			case MagLoadStage.PUSHING_DOWN:
+			case MagLoadStage.AddING_DOWN:
 					GameObject obj = gameObject.transform.FindChild ("round_1");
 					obj.transform.localPosition = Vector3.Lerp (transform.FindChild ("point_start_load").localPosition, 
 		                                 transform.FindChild ("point_load").localPosition, 
@@ -98,7 +98,7 @@ void Update() {
 					obj.transform.localRotation = Quaternion.Slerp (transform.FindChild ("point_start_load").localRotation, 
 		                                     transform.FindChild ("point_load").localRotation, 
 		                                     mag_load_progress_display);
-					for (i=1; i<num_rounds; ++i) {
+					for(int i=1; i<num_rounds; ++i) {
 							obj = transform.FindChild ("round_" + (i + 1));
 							obj.transform.localPosition = Vector3.Lerp (round_pos [i - 1], round_pos [i], mag_load_progress_display);
 							obj.transform.localRotation = Quaternion.Slerp (round_rot [i - 1], round_rot [i], mag_load_progress_display);
@@ -112,12 +112,12 @@ void Update() {
 					obj.localRotation = Quaternion.Slerp (transform.FindChild ("point_load").localRotation, 
 		                                     round_rot [0], 
 		                                     mag_load_progress_display);
-					for (i=1; i<num_rounds; ++i) {
+					for(int i=1; i<num_rounds; ++i) {
 							obj = transform.FindChild ("round_" + (i + 1));
 							obj.localPosition = round_pos [i];
 					}
 					break;
-			case MagLoadStage.PUSHING_UP:
+			case MagLoadStage.AddING_UP:
 					obj = transform.FindChild ("round_1");
 					obj.localPosition = Vector3.Lerp (transform.FindChild ("point_start_load").localPosition, 
 		                                 transform.FindChild ("point_load").localPosition, 
@@ -125,7 +125,7 @@ void Update() {
 					obj.localRotation = Quaternion.Slerp (transform.FindChild ("point_start_load").localRotation, 
 		                                     transform.FindChild ("point_load").localRotation, 
 		                                     1.0f - mag_load_progress_display);
-					for (i=1; i<num_rounds; ++i) {
+					for(int i=1; i<num_rounds; ++i) {
 							obj = transform.FindChild ("round_" + (i + 1));
 							obj.localPosition = Vector3.Lerp (round_pos [i - 1], round_pos [i], mag_load_progress_display);
 							obj.localRotation = Quaternion.Slerp (round_rot [i - 1], round_rot [i], mag_load_progress_display);
@@ -139,7 +139,7 @@ void Update() {
 					obj.localRotation = Quaternion.Slerp (transform.FindChild ("point_load").localRotation, 
 		                                     round_rot [0], 
 		                                     1.0f - mag_load_progress_display);
-					for (i=1; i<num_rounds; ++i) {
+					for(int i=1; i<num_rounds; ++i) {
 							obj = transform.FindChild ("round_" + (i + 1));
 							obj.localPosition = round_pos [i];
 							obj.localRotation = round_rot [i];
@@ -175,9 +175,9 @@ bool AddRound() {
 			if (num_rounds >= kMaxRounds || mag_load_stage != MagLoadStage.NONE) {
 					return false;
 			}
-			mag_load_stage = MagLoadStage.PUSHING_DOWN;
+			mag_load_stage = MagLoadStage.AddING_DOWN;
 			mag_load_progress = 0.0f;
-			Tools.PlaySoundFromGroup (sound_add_round, 0.3f);
+			this.PlaySoundFromGroup (sound_add_round, 0.3f);
 			++num_rounds;
 			var round_obj = transform.FindChild ("round_" + num_rounds);
 			round_obj.renderer.enabled = true;
@@ -191,7 +191,7 @@ int NumRounds() {
 void CollisionSound() {
 			if (!collided) {
 					collided = true;
-					Tools.PlaySoundFromGroup (sound_mag_bounce, 0.3f);
+					this.PlaySoundFromGroup (sound_mag_bounce, 0.3f);
 			}
 	}
 

@@ -36,5 +36,22 @@ public static class Tools
 	public static Quaternion RandomOrientation() {
 		return Quaternion.EulerAngles(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360));
 	}
+
+	public static Vector3 mix( Vector3 a, Vector3 b, float  val) {
+		return a + (b-a) * val;
+	}
+	
+	public static Quaternion mix( Quaternion a, Quaternion b, float  val) {
+		float angle  = 0.0f;
+		var axis = Vector3();
+		(Quaternion.Inverse(b)*a).ToAngleAxis(angle, axis);
+		if(angle > 180){
+			angle -= 360;
+		}
+		if(angle < -180){
+			angle += 360;
+		}
+		return a * Quaternion.AngleAxis(angle * -val, axis);
+	}
 }
 

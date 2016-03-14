@@ -3,10 +3,10 @@ using System.Collections;
 
 public class WeaponHolder : MonoBehaviour
 {
-	GameObject gun_object;
-	GameObject mag_object;
-	GameObject bullet_object;
-	GameObject casing_object;
+	public GameObject gun_object;
+	public GameObject mag_object;
+	public GameObject bullet_object;
+	public GameObject casing_object;
 	
 	void Start () {
 	}
