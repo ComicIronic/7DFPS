@@ -9,7 +9,7 @@ public class YourPlayerController : BasicPlayerController {
 	
 	void Update()
 	{
-		UpdateBasicController(); //This function is in BasicPlayerController, and updates position/rotation of the object
+		UpdateBasicController(); //This void is in BasicPlayerController, and updates position/rotation of the object
 		//your code goes here! :-)
 	}
 }

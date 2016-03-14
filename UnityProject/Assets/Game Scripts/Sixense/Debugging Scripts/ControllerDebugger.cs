@@ -16,19 +16,19 @@ public class ControllerDebugger : PlayerController {
 	
 	private string GetDebugData()
 	{
-		StringBuilder debugData = new StringBuilder();
+		stringBuilder debugData = new stringBuilder();
 		
-		if(Mathf.Abs(ControllerData.Joystick.X) > 0.01)
+		if(Mathf.Abs(ControllerData.Joystick.X) > 0.01f)
 		{
-			debugData.Append(" Joy X: " + ControllerData.Joystick.X);
+			debugData.Append("" + ControllerData.Joystick.X);
 		}
-		if(Mathf.Abs(ControllerData.Joystick.Y) > 0.01)
+		if(Mathf.Abs(ControllerData.Joystick.Y) > 0.01f)
 		{
-			debugData.Append(" Joy Y: " + ControllerData.Joystick.Y);
+			debugData.Append("" + ControllerData.Joystick.Y);
 		}
-		if(Mathf.Abs(ControllerData.Trigger) > 0.01)
+		if(Mathf.Abs(ControllerData.Trigger) > 0.01f)
 		{
-			debugData.Append(" Trigger: " + ControllerData.Trigger);
+			debugData.Append("" + ControllerData.Trigger);
 		}
 		debugData.Append(ControllerData.Buttons.One ? " Button 1" : "");
 		debugData.Append(ControllerData.Buttons.Two ? " Button 2" : "");
@@ -38,6 +38,6 @@ public class ControllerDebugger : PlayerController {
 		debugData.Append(ControllerData.Buttons.Bumper ? " BumperButton" : "");
 		debugData.Append(ControllerData.Buttons.Joystick ? " JoyButton" : "");
 		
-		return debugData.ToString();
+		return debugData.Tostring();
 	}
 }
