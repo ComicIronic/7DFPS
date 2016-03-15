@@ -15,7 +15,7 @@ public class FPSInputController : MonoBehaviour
 	
 	// Use this for initialization
 	void Awake () {
-		motor = GetComponent(CharacterMotor);
+		motor = GetComponent<CharacterMotor>();
 	}
 	
 	// Update is called once per frame
@@ -24,14 +24,14 @@ public class FPSInputController : MonoBehaviour
 		var directionVector = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		
 		if(old_vert_axis < 0.9f && Input.GetAxis("Vertical") >= 0.9f){
-			if(forward_input_delay < 0.4f && !GetComponent(AimScript).IsAiming()){
+			if(forward_input_delay < 0.4f && !GetComponent<AimScript>().IsAiming()){
 				motor.SetRunning(Mathf.Clamp((0.4f-forward_input_delay)/0.2f,0.01f,1.0f));
 				running = true;			
 			}
 			forward_input_delay = 0.0f;
 		}
 		forward_input_delay += Time.deltaTime;
-		if(forward_input_delay > 0.4f || GetComponent(AimScript).IsAiming()){
+		if(forward_input_delay > 0.4f || GetComponent<AimScript>().IsAiming()){
 			motor.SetRunning(0.0f);
 			running = false;
 		}

@@ -10,8 +10,8 @@ public class mag_script : MonoBehaviour
 	private Vector3[] round_pos;
 	private Quaternion[] round_rot;
 	private Vector3 old_pos;
-	Vector3 hold_offset;
-	Vector3 hold_rotation;
+	public Vector3 hold_offset;
+	public Vector3 hold_rotation;
 	bool collided = false;
 	AudioClip[] sound_add_round;
 	AudioClip[] sound_mag_bounce;
@@ -64,7 +64,7 @@ void Update() {
 							}
 					}
 					break;
-			case MagLoadStage.AddING_UP:
+			case MagLoadStage.PUSHING_UP:
 					mag_load_progress += Time.deltaTime * 20.0f;
 					if (mag_load_progress >= 1.0f) {
 							mag_load_stage = MagLoadStage.NONE;
@@ -80,7 +80,7 @@ void Update() {
 			case MagLoadStage.REMOVING_ROUND:
 					mag_load_progress += Time.deltaTime * 20.0f;
 					if (mag_load_progress >= 1.0f) {
-							mag_load_stage = MagLoadStage.AddING_UP;
+							mag_load_stage = MagLoadStage.PUSHING_UP;
 							mag_load_progress = 0.0f;
 					}
 					break;
@@ -117,7 +117,7 @@ void Update() {
 							obj.localPosition = round_pos [i];
 					}
 					break;
-			case MagLoadStage.AddING_UP:
+			case MagLoadStage.PUSHING_UP:
 					obj = transform.FindChild ("round_1");
 					obj.localPosition = Vector3.Lerp (transform.FindChild ("point_start_load").localPosition, 
 		                                 transform.FindChild ("point_load").localPosition, 
@@ -158,7 +158,7 @@ bool RemoveRound() {
 			return true;
 	}
 
-bool RemoveRoundAnimated() {
+public bool RemoveRoundAnimated() {
 			if (num_rounds == 0 || mag_load_stage != MagLoadStage.NONE) {
 					return false;
 			}
@@ -167,11 +167,11 @@ bool RemoveRoundAnimated() {
 			return true;
 	}
 
-bool IsFull() {
+public bool IsFull() {
 			return num_rounds == kMaxRounds;
 	}
 
-bool AddRound() {
+public bool AddRound() {
 			if (num_rounds >= kMaxRounds || mag_load_stage != MagLoadStage.NONE) {
 					return false;
 			}
@@ -184,7 +184,7 @@ bool AddRound() {
 			return true;
 	}
 
-int NumRounds() {
+public int NumRounds() {
 			return num_rounds;
 	}
 

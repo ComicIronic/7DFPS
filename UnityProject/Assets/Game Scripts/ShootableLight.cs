@@ -13,11 +13,11 @@ public class ShootableLight : MonoBehaviour
 	
 	private float light_amount  = 1.0f;
 	
-	void WasShot(GameObject obj, Vector3 pos, Vector3 vel) {
+	public void WasShot(GameObject obj, Vector3 pos, Vector3 vel) {
 		if(!destroyed){
 			destroyed = true;
 			light_amount = 0.0f;
-			Instantiate(destroy_effect, transform.FindChild("bulb").position, Quaternion.identity);
+			(GameObject)Instantiate(destroy_effect, transform.FindChild("bulb").position, Quaternion.identity);
 		}
 		if(obj && obj.collider && obj.collider.material.name == "glass (Instance)"){
 			GameObject.Destroy(obj);

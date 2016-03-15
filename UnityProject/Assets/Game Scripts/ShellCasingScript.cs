@@ -4,7 +4,7 @@ using System.Collections;
 public class ShellCasingScript : MonoBehaviour
 {
 	AudioClip[] sound_shell_bounce;
-	bool collided  = false;
+	public bool collided  = false;
 	Vector3 old_pos;
 	float life_time  = 0.0f;
 	float glint_delay  = 0.0f;
@@ -22,7 +22,7 @@ public class ShellCasingScript : MonoBehaviour
 	void CollisionSound() {
 		if(!collided){
 			collided = true;
-			Tools.PlaySoundFromGroup(sound_shell_bounce, 0.3f);
+			this.PlaySoundFromGroup(sound_shell_bounce, 0.3f);
 		}
 	}
 	

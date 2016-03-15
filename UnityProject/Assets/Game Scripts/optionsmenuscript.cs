@@ -71,7 +71,7 @@ public class optionsmenuscript : MonoBehaviour
 		return rect;
 	}
 	
-	void DrawLabel(string text) {
+	public void DrawLabel(string text) {
 		DrawCursor_Offset(17);
 		GUI.Label (
 			DrawCursor_RectSpace(400),//GUI.skin.label.CalcSize(new GUIContent(text)).x), 
@@ -159,7 +159,7 @@ public class optionsmenuscript : MonoBehaviour
 		PlayerPrefs.SetFloat("gun_distance", gun_distance);    
 	}
 	
-	bool IsMenuShown() {
+	public bool IsMenuShown() {
 		return show_menu;
 	}
 	

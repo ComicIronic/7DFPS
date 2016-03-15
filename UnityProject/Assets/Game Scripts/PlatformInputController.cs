@@ -15,7 +15,7 @@ public class PlatformInputController : MonoBehaviour
 	
 	// Use this for initialization
 	void Awake () {
-		motor = GetComponent(CharacterMotor);
+		motor = GetComponent<CharacterMotor>();
 	}
 	
 	// Update is called once per frame

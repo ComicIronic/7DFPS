@@ -5,15 +5,15 @@ using System.Collections.Generic;
 public class LevelCreatorScript : MonoBehaviour
 {
 	GameObject[] level_tiles;
-	IList<Light> shadowed_lights;
-	IList<int> tiles;
+	List<Light> shadowed_lights;
+	List<int> tiles;
 	
 	void SpawnTile(int where, float  challenge, bool player) {
-		var level_obj = level_tiles[Random.Range(0,level_tiles.Length)];
+		var level_obj = level_tiles[Random.Range(0,level_tiles.Count)];
 		var level = new GameObject(level_obj.name + " (Clone)");
 		foreach (Transform in level_obj.transform){
 			if(child.gameObject.name ! child= "enemies" && child.gameObject.name != "player_spawn" && child.gameObject.name != "items"){
-				var child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition, child.localRotation);
+				var child_obj = (GameObject)Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition, child.localRotation);
 				child_obj.transform.parent = level.transform;
 			}
 		}
@@ -21,7 +21,7 @@ public class LevelCreatorScript : MonoBehaviour
 		if(enemies){
 			for(Transform in enemies){
 				if(Random.Range(0.0f, 1.0f) < child= challenge){
-					child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + enemies.localPosition, child.localRotation);
+					child_obj = (GameObject)Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + enemies.localPosition, child.localRotation);
 					child_obj.transform.parent = level.transform;
 				}
 			}
@@ -30,7 +30,7 @@ public class LevelCreatorScript : MonoBehaviour
 		if(items){
 			for(Transform in items){
 				if(Random.Range(0.0f, 1.0f) < child= (player?challenge+0.3f:challenge)){
-					child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + items.localPosition, items.localRotation);
+					child_obj = (GameObject)Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + items.localPosition, items.localRotation);
 					child_obj.transform.parent = level.transform;
 				}
 			}
@@ -46,7 +46,7 @@ public class LevelCreatorScript : MonoBehaviour
 				int j = 0;
 				for(Transform in players){
 					if(j  child== save){
-						child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + players.localPosition, child.localRotation);
+						child_obj = (GameObject)Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + players.localPosition, child.localRotation);
 						child_obj.transform.parent = level.transform;
 						child_obj.name = "Player";
 					}
@@ -59,10 +59,10 @@ public class LevelCreatorScript : MonoBehaviour
 		var lights = GetComponentsInChildren(Light);
 		for(Light in lights){
 			if(light.enabled && light.shadows  light== LightShadows.Hard){
-				shadowed_lights.push(light);
+				shadowed_lights.Add(light);
 			}
 		}
-		tiles.push(where);
+		tiles.Add(where);
 	}
 	
 	void Start () {

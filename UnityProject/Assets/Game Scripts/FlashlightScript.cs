@@ -19,19 +19,19 @@ public class FlashlightScript : MonoBehaviour
 	}
 	
 	void Start () {
-		initial_pointlight_intensity = transform.FindChild("Pointlight").gameObject.GetComponent(Light).intensity;
-		initial_spotlight_intensity = transform.FindChild("Spotlight").gameObject.GetComponent(Light).intensity;
+		initial_pointlight_intensity = transform.FindChild("Pointlight").gameObject.GetComponent<Light>().intensity;
+		initial_spotlight_intensity = transform.FindChild("Spotlight").gameObject.GetComponent<Light>().intensity;
 		battery_life_remaining = Random.Range(max_battery_life*0.2f, max_battery_life);
 	}
 	
-	void TurnOn() {
+	public void TurnOn() {
 		if(!switch_on){
 			switch_on = true;
 			audio.PlayOneShot(sound_turn_on, kSoundVolume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 		}
 	}
 	
-	void TurnOff() {
+	public void TurnOff() {
 		if(switch_on){
 			switch_on = false;
 			audio.PlayOneShot(sound_turn_off, kSoundVolume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
@@ -45,13 +45,13 @@ public class FlashlightScript : MonoBehaviour
 				battery_life_remaining = 0.0f;
 			}
 			var battery_curve_eval = battery_curve.Evaluate(1.0f-battery_life_remaining/max_battery_life);
-			transform.FindChild("Pointlight").gameObject.GetComponent(Light).intensity = initial_pointlight_intensity * battery_curve_eval * 8.0f;
-			transform.FindChild("Spotlight").gameObject.GetComponent(Light).intensity = initial_spotlight_intensity * battery_curve_eval * 3.0f;
-			transform.FindChild("Pointlight").gameObject.GetComponent(Light).enabled = true;
-			transform.FindChild("Spotlight").gameObject.GetComponent(Light).enabled = true;
+			transform.FindChild("Pointlight").gameObject.GetComponent<Light>().intensity = initial_pointlight_intensity * battery_curve_eval * 8.0f;
+			transform.FindChild("Spotlight").gameObject.GetComponent<Light>().intensity = initial_spotlight_intensity * battery_curve_eval * 3.0f;
+			transform.FindChild("Pointlight").gameObject.GetComponent<Light>().enabled = true;
+			transform.FindChild("Spotlight").gameObject.GetComponent<Light>().enabled = true;
 		} else {
-			transform.FindChild("Pointlight").gameObject.GetComponent(Light).enabled = false;
-			transform.FindChild("Spotlight").gameObject.GetComponent(Light).enabled = false;
+			transform.FindChild("Pointlight").gameObject.GetComponent<Light>().enabled = false;
+			transform.FindChild("Spotlight").gameObject.GetComponent<Light>().enabled = false;
 		}
 		if(rigidbody){
 			transform.FindChild("Pointlight").light.enabled = true;

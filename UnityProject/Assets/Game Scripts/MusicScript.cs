@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+public enum MusicEvent {DEAD, WON};
+
 public class MusicScript : MonoBehaviour
 {
 	
@@ -17,9 +19,8 @@ public class MusicScript : MonoBehaviour
 	private float gain_recover_delay  = 0.0f;
 	private float danger_level_accumulate  = 0.0f;
 	private float mystical  = 0.0f;
-	enum MusicEvent {DEAD, WON};
-	
-	void HandleEvent(MusicEvent mevent) {
+
+	public void HandleEvent(MusicEvent mevent) {
 		switch(mevent){
 		case MusicEvent.DEAD:
 			target_global_gain = 0.0f;
@@ -34,20 +35,20 @@ public class MusicScript : MonoBehaviour
 		}
 	}
 	
-	void AddDangerLevel(float val) {
+	public void AddDangerLevel(float val) {
 		danger_level_accumulate += val;
 	}
 	
-	void SetMystical(float val) {
+	public void SetMystical(float val) {
 		mystical = val;
 	}
 	
 	void Start () {
-		music_sources = new AudioSource[music_layers.Length];
-		music_volume = new float[music_layers.Length];
-		target_gain = new float[music_layers.Length];
-		for(int i = 0; i<music_layers.length; ++i){
-			AudioSource  source= gameObject.AddComponent(AudioSource);
+		music_sources = new AudioSource[music_layers.Count];
+		music_volume = new float[music_layers.Count];
+		target_gain = new float[music_layers.Count];
+		for(int i = 0; i<music_layers.Count; ++i){
+			AudioSource  source= gameObject.AddComponent<AudioSource>();
 			source.clip = music_layers[i];
 			music_sources[i] = source;
 			music_sources[i].loop = true;
@@ -55,7 +56,7 @@ public class MusicScript : MonoBehaviour
 			music_volume[i] = 0.0f;
 			target_gain[i] = 0.0f;
 		}
-		sting_source = gameObject.AddComponent(AudioSource);
+		sting_source = gameObject.AddComponent<AudioSource>();
 		music_sources[0].Play();
 		music_sources[1].Play();
 		music_sources[2].Play();
@@ -67,7 +68,7 @@ public class MusicScript : MonoBehaviour
 	void Update() { 
 		danger = Mathf.Max(danger_level_accumulate, danger);
 		danger_level_accumulate = 0.0f;
-		for(int i = 0; i<music_layers.Length; ++i){
+		for(int i = 0; i<music_layers.Count; ++i){
 			music_sources[i].volume = music_volume[i] * PlayerPrefs.GetFloat("music_volume");
 		}
 		sting_source.volume = PlayerPrefs.GetFloat("music_volume", 1.0f);
@@ -88,7 +89,7 @@ public class MusicScript : MonoBehaviour
 			}
 		}
 		
-		for(int i = 0; i<music_layers.Length; ++i){
+		for(int i = 0; i<music_layers.Count; ++i){
 			music_volume[i] = Mathf.Lerp(target_gain[i], music_volume[i], 0.99f) * global_gain;
 		}
 	}

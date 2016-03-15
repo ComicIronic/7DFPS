@@ -8,30 +8,30 @@ public class BulletPileScript : MonoBehaviour
 		WeaponHolder weapon_holder = holder.weapon.GetComponent<WeaponHolder> ();
 		int num_bullets = Random.Range(1,6);
 		for(int i = 0; i<num_bullets; ++i){
-			GameObject bullet = Instantiate(weapon_holder.bullet_object);
+			GameObject bullet = (GameObject)Instantiate(weapon_holder.bullet_object);
 			bullet.transform.position = transform.position + 
-				Vector3(Random.Range(-0.1f,0.1f),
+				new Vector3(Random.Range(-0.1f,0.1f),
 				        Random.Range(0.0f, 0.2f),
 				        Random.Range(-0.1f,0.1f));
-			bullet.transform.rotation = RandomOrientation();
+			bullet.transform.rotation = Tools.RandomOrientation();
 			bullet.AddComponent<Rigidbody>();
 			bullet.GetComponent<ShellCasingScript>().collided = true;
 		}
 		if(Random.Range(0,4) == 0){
-			GameObject tape = Instantiate(holder.tape_object);
+			GameObject tape = (GameObject)Instantiate(holder.tape_object);
 			tape.transform.position = transform.position + 
-				Vector3(Random.Range(-0.1f,0.1f),
+				new Vector3(Random.Range(-0.1f,0.1f),
 				        Random.Range(0.0f, 0.2f),
 				        Random.Range(-0.1f,0.1f));
-			tape.transform.rotation = RandomOrientation();		
+			tape.transform.rotation = Tools.RandomOrientation();		
 		}
 		if(Random.Range(0,4) == 0 && !holder.has_flashlight){
-			GameObject flashlight = Instantiate(holder.flashlight_object);
+			GameObject flashlight = (GameObject)Instantiate(holder.flashlight_object);
 			flashlight.transform.position = transform.position + 
-				Vector3(Random.Range(-0.1f,0.1f),
+				new Vector3(Random.Range(-0.1f,0.1f),
 				        Random.Range(0.2f, 0.4f),
 				        Random.Range(-0.1f,0.1f));
-			flashlight.transform.rotation = RandomOrientation();
+			flashlight.transform.rotation = Tools.RandomOrientation();
 		}
 	}
 	

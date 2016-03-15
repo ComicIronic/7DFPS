@@ -80,8 +80,8 @@ public class AimScript : MonoBehaviour
 	};
 	
 	private bool aim_toggle  = false;
-	private float kAimSpringStrength  = 100.0f;
-	private float kAimSpringDamping  = 0.00001f;
+	private static float kAimSpringStrength  = 100.0f;
+	private static float kAimSpringDamping  = 0.00001f;
 	private Spring aim_spring = new Spring(0,0,kAimSpringStrength,kAimSpringDamping);
 	
 	private GameObject  held_flashlight= null;
@@ -104,8 +104,8 @@ public class AimScript : MonoBehaviour
 	private float view_rotation_x  = 0.0f;
 	private float view_rotation_y  = 0.0f;
 	
-	private float kRecoilSpringStrength  = 800.0f;
-	private float kRecoilSpringDamping  = 0.000001f;
+	private static float kRecoilSpringStrength  = 800.0f;
+	private static float kRecoilSpringDamping  = 0.000001f;
 	private Spring x_recoil_spring = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
 	private Spring y_recoil_spring = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
 	private Spring head_recoil_spring_x = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
@@ -131,7 +131,7 @@ public class AimScript : MonoBehaviour
 	private Spring mag_ground_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
 	
 	private bool left_hand_occupied  = false;
-	private int kMaxHeadRecoil  = 10;
+	private static int kMaxHeadRecoil  = 10;
 	private  float[]  head_recoil_delay = new float[kMaxHeadRecoil];
 	private int next_head_recoil_delay  = 0;
 	private  Vector3 mag_ground_pos ;
@@ -179,7 +179,7 @@ public class AimScript : MonoBehaviour
 	class WeaponSlot {
 		public GameObject  obj= null;
 		public WeaponSlotType type= WeaponSlotType.EMPTY;
-		public Vector3  start_pos = Vector3(0,0,0);
+		public Vector3  start_pos = Vector3.zero;
 		public Quaternion  start_rot = Quaternion.identity;
 		public Spring spring = new Spring(1,1,100,0.000001f);
 	};
@@ -191,20 +191,20 @@ public class AimScript : MonoBehaviour
 	private bool dead  = false;
 	private bool won  = false;
 	
-	bool IsAiming() {
+	public bool IsAiming() {
 		return (gun_instance != null && aim_spring.target_state == 1.0f);
 	}
 	
-	bool IsDead() {
+	public bool IsDead() {
 		return dead;
 	}
 	
-	void StepRecoil(float amount) {
+	public void StepRecoil(float amount) {
 		x_recoil_spring.vel += Random.Range(100,400) * amount;
 		y_recoil_spring.vel += Random.Range(-200,200) * amount;
 	}
 	
-	void WasShot() {
+	public void WasShot() {
 		head_recoil_spring_x.vel += Random.Range(-400,400);
 		head_recoil_spring_y.vel += Random.Range(-400,400);
 		x_recoil_spring.vel += Random.Range(-400,400);
@@ -222,7 +222,7 @@ public class AimScript : MonoBehaviour
 		}
 	}
 	
-	void FallDeath(Vector3 vel) {
+	public void FallDeath(Vector3 vel) {
 		if(!god_mode && !won){
 			SetDead(true);
 			head_fall_vel = vel.y;
@@ -231,13 +231,13 @@ public class AimScript : MonoBehaviour
 			head_recoil_spring_y.vel += Random.Range(-400,400);
 		}
 	}
-	
-	void InstaKill() {
+
+	public void InstaKill() {
 		SetDead(true);
 		dead_fade = 1.0f;
 	}
 	
-	void Shock() {
+	public void Shock() {
 		if(!god_mode && !won){
 			if(!dead){
 				this.PlaySoundFromGroup(sound_electrocute, 1.0f);
@@ -248,7 +248,7 @@ public class AimScript : MonoBehaviour
 		head_recoil_spring_y.vel += Random.Range(-400,400);
 	}
 	
-	void SetDead(bool new_dead) {
+	public void SetDead(bool new_dead) {
 		if(new_dead == dead){
 			return;
 		}
@@ -260,7 +260,7 @@ public class AimScript : MonoBehaviour
 			head_tilt = 0.0f;
 			head_fall = 0.0f;
 		} else {
-			GetComponent<MusicScript>().HandleEvent(MusicScript.MusicEvent.DEAD);
+			GetComponent<MusicScript>().HandleEvent(MusicEvent.DEAD);
 			head_tilt_vel = Random.Range(-100,100);
 			head_tilt_x_vel = Random.Range(-100,100);
 			head_tilt_y_vel = Random.Range(-100,100);
@@ -270,7 +270,7 @@ public class AimScript : MonoBehaviour
 		}
 	}
 	
-	void AddLooseBullet(bool spring) {
+	public void AddLooseBullet(bool spring) {
 		loose_bullets.Add((GameObject)Instantiate(casing_with_bullet));
 		Spring new_spring = new Spring(0.3f,0.3f,kAimSpringStrength,kAimSpringDamping);
 		loose_bullet_spring.Add(new_spring);
@@ -362,8 +362,7 @@ public class AimScript : MonoBehaviour
 	}
 	
 	Vector3 AimDir() {
-		Quaternion aim_rot = new Quaternion();
-		aim_rot.SetEulerAngles(-rotation_y * Mathf.PI / 180.0f, rotation_x * Mathf.PI / 180.0f, 0.0f);
+		Quaternion aim_rot = Quaternion.Euler(-rotation_y , rotation_x, 0.0f);
 		return aim_rot * new Vector3(0.0f,0.0f,1.0f);
 	}
 	
@@ -650,8 +649,8 @@ public class AimScript : MonoBehaviour
 		if(Input.GetButtonDown("Insert")){
 			if(loose_bullets.Count > 0){
 				if(GetGunScript().AddRoundToCylinder()){
-					GameObject.Destroy(loose_bullets.pop());
-					loose_bullet_spring.pop();
+					GameObject.Destroy(loose_bullets.Pop());
+					loose_bullet_spring.Pop();
 				}
 			}
 		}
@@ -786,10 +785,10 @@ public class AimScript : MonoBehaviour
 			HandleGunControls(insert_mag_with_number_key);
 		} else if(mag_stage == HandMagStage.HOLD){
 			if(Input.GetButtonDown("Insert")){
-				if(loose_bullets.length > 0){
+				if(loose_bullets.Count > 0){
 					if(magazine_instance_in_hand.GetComponent<mag_script>().AddRound()){
-						GameObject.Destroy(loose_bullets.pop());
-						loose_bullet_spring.pop();
+						GameObject.Destroy(loose_bullets.Pop());
+						loose_bullet_spring.Pop();
 					}
 				}
 			}
@@ -819,11 +818,11 @@ public class AimScript : MonoBehaviour
 		if(tape_in_progress && start_tape_delay == 0.0f){ 
 			audiosource_audio_content.Play();
 		}
-		if(!tape_in_progress && tapes_remaining.length > 0){
+		if(!tape_in_progress && tapes_remaining.Count > 0){
 			audiosource_audio_content.clip = tapes_remaining[0];
 			tapes_remaining.RemoveAt(0);
 			//audiosource_audio0.5,3.0t.pitch = 10.0f;
-			//audiosource_audio_content.clip = holder.sound_scream[Random.Range(0,holder.sound_scream.length)];
+			//audiosource_audio_content.clip = holder.sound_scream[Random.Range(0,holder.sound_scream.Count)];
 			start_tape_delay = Random.Range(0.5f, 3.0f);
 			stop_tape_delay = 0.0f;
 			tape_in_progress = true;
@@ -863,46 +862,46 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void UpdateCheats() {
-		if(iddqd_progress == 0 && Input.GetKeyDown('i')){
+		if(iddqd_progress == 0 && Input.GetKeyDown("i")){
 			++iddqd_progress; cheat_delay = 1.0f;
-		} else if(iddqd_progress == 1 && Input.GetKeyDown('d')){
+		} else if(iddqd_progress == 1 && Input.GetKeyDown("d")){
 			++iddqd_progress; cheat_delay = 1.0f;
-		} else if(iddqd_progress == 2 && Input.GetKeyDown('d')){
+		} else if(iddqd_progress == 2 && Input.GetKeyDown("d")){
 			++iddqd_progress; cheat_delay = 1.0f;
-		} else if(iddqd_progress == 3 && Input.GetKeyDown('q')){
+		} else if(iddqd_progress == 3 && Input.GetKeyDown("q")){
 			++iddqd_progress; cheat_delay = 1.0f;
-		} else if(iddqd_progress == 4 && Input.GetKeyDown('d')){
+		} else if(iddqd_progress == 4 && Input.GetKeyDown("d")){
 			iddqd_progress = 0;
 			god_mode = !god_mode; 
 			this.PlaySoundFromGroup(holder.sound_scream, 1.0f);
 		}
-		if(idkfa_progress == 0 && Input.GetKeyDown('i')){
+		if(idkfa_progress == 0 && Input.GetKeyDown("i")){
 			++idkfa_progress; cheat_delay = 1.0f;
-		} else if(idkfa_progress == 1 && Input.GetKeyDown('d')){
+		} else if(idkfa_progress == 1 && Input.GetKeyDown("d")){
 			++idkfa_progress; cheat_delay = 1.0f;
-		} else if(idkfa_progress == 2 && Input.GetKeyDown('k')){
+		} else if(idkfa_progress == 2 && Input.GetKeyDown("k")){
 			++idkfa_progress; cheat_delay = 1.0f;
-		} else if(idkfa_progress == 3 && Input.GetKeyDown('f')){
+		} else if(idkfa_progress == 3 && Input.GetKeyDown("f")){
 			++idkfa_progress; cheat_delay = 1.0f;
-		} else if(idkfa_progress == 4 && Input.GetKeyDown('a')){
+		} else if(idkfa_progress == 4 && Input.GetKeyDown("a")){
 			idkfa_progress = 0;
-			if(loose_bullets.length < 30){
+			if(loose_bullets.Count < 30){
 				this.PlaySoundFromGroup(sound_bullet_grab, 0.2f);
 			}
-			while(loose_bullets.length < 30){
+			while(loose_bullets.Count < 30){
 				AddLooseBullet(true);
 			}
 			this.PlaySoundFromGroup(holder.sound_scream, 1.0f);
 		}
-		if(slomo_progress == 0 && Input.GetKeyDown('s')){
+		if(slomo_progress == 0 && Input.GetKeyDown("s")){
 			++slomo_progress; cheat_delay = 1.0f;
-		} else if(slomo_progress == 1 && Input.GetKeyDown('l')){
+		} else if(slomo_progress == 1 && Input.GetKeyDown("l")){
 			++slomo_progress; cheat_delay = 1.0f;
-		} else if(slomo_progress == 2 && Input.GetKeyDown('o')){
+		} else if(slomo_progress == 2 && Input.GetKeyDown("o")){
 			++slomo_progress; cheat_delay = 1.0f;
-		} else if(slomo_progress == 3 && Input.GetKeyDown('m')){
+		} else if(slomo_progress == 3 && Input.GetKeyDown("m")){
 			++slomo_progress; cheat_delay = 1.0f;
-		} else if(slomo_progress == 4 && Input.GetKeyDown('o')){
+		} else if(slomo_progress == 4 && Input.GetKeyDown("o")){
 			slomo_progress = 0;
 			slomo_mode = true;
 			if(Time.timeScale == 1.0f){
@@ -936,7 +935,7 @@ public class AimScript : MonoBehaviour
 			}
 		}
 		if(tape_in_progress && audiosource_tape_background.isPlaying){ 
-			GetComponent<MusicScript>().SetMystical((tapes_heard.length+1.0f)/total_tapes.length);
+			GetComponent<MusicScript>().SetMystical((tapes_heard.Count+1.0f)/total_tapes.Count);
 			audiosource_tape_background.volume = PlayerPrefs.GetFloat("voice_volume", 1.0f);
 			audiosource_tape_background.pitch = Mathf.Min(1.0f,audiosource_audio_content.pitch + Time.deltaTime * 3.0f);
 			audiosource_audio_content.volume = PlayerPrefs.GetFloat("voice_volume", 1.0f);
@@ -954,9 +953,9 @@ public class AimScript : MonoBehaviour
 				stop_tape_delay = Mathf.Max(0.0f, stop_tape_delay - Time.deltaTime);
 				if(stop_tape_delay == 0.0f){
 					tape_in_progress = false;
-					tapes_he0.5,3.0h(audiosource_audio_content.clip);
+					tapes_heard.Add(audiosource_audio_content.clip);
 					StopTapePlay();
-					if(tapes_heard.length == total_tapes.length){
+					if(tapes_heard.Count == total_tapes.Count){
 						StartWin();
 					}
 				}
@@ -1072,7 +1071,7 @@ public class AimScript : MonoBehaviour
 		if((Input.GetButton("Hold To Aim") || aim_toggle) && !dead && gun_instance){
 			aim_spring.target_state = 1.0f;
 			 RaycastHit hit ;
-			if(Physics.Linecast(main_camera.transform.position, AimPos() + AimDir() * 0.2f, hit, 1 << 0)){
+			if(Physics.Linecast(main_camera.transform.position, AimPos() + AimDir() * 0.2f, out hit, 1 << 0)){
 				aim_spring.target_state = Mathf.Clamp(
 					1.0f - (Vector3.Distance(hit.point, main_camera.transform.position)/(GunDist() + 0.2f)),
 					0.0f,
@@ -1128,21 +1127,21 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void UpdateCameraAndPlayerTransformation() {
-		main_camera.transform.localEulerAngles = Vector3(-view_rotation_y, view_rotation_x, head_tilt);
+		main_camera.transform.localEulerAngles = new Vector3(-view_rotation_y, view_rotation_x, head_tilt);
 		if(!disable_recoil){
-			main_camera.transform.localEulerAngles += Vector3(head_recoil_spring_y.state, head_recoil_spring_x.state, 0); 
+			main_camera.transform.localEulerAngles += new Vector3(head_recoil_spring_y.state, head_recoil_spring_x.state, 0); 
 		}
-		character_controller.transform.localEulerAngles.y = view_rotation_x;
-		main_camera.transform.position = transform.position;
-		main_camera.transform.position.y += character_controller.height * character_controller.transform.localScale.y - 0.1f;
-		main_camera.transform.position.y += head_fall;
+		character_controller.transform.localEulerAngles = new Vector3 (character_controller.transform.localEulerAngles.x, view_rotation_x, character_controller.transform.localEulerAngles.z);
+		main_camera.transform.position = new Vector3 (this.transform.position.x, 
+		                                             this.transform.position.y + (character_controller.height * character_controller.transform.localScale.y - 0.1f) + head_fall,
+		                                             this.transform.position.z);
 	}
 	
 	void UpdateGunTransformation() {
 		var aim_dir = AimDir();
 		var aim_pos = AimPos();	
 		
-		var unaimed_dir = (transform.forward + Vector3(0,-1,0)).normalized;
+		var unaimed_dir = (transform.forward + Vector3.down).normalized;
 		var unaimed_pos = main_camera.transform.position + unaimed_dir*GunDist();
 		
 		if(disable_springs){ 
@@ -1172,18 +1171,18 @@ public class AimScript : MonoBehaviour
 		if(!disable_recoil){		
 			gun_instance.transform.RotateAround(
 				gun_instance.transform.FindChild("point_recoil_rotate").position,
-				gun_instance.transform.rotation * Vector3(1,0,0),
+				gun_instance.transform.rotation * new Vector3(1,0,0),
 				x_recoil_spring.state);
 			
 			gun_instance.transform.RotateAround(
 				gun_instance.transform.FindChild("point_recoil_rotate").position,
-				Vector3(0,1,0),
+				Vector3.up,
 				y_recoil_spring.state); 
 		}
 	}
 	
 	void UpdateFlashlightTransformation() {
-		var flashlight_hold_pos = main_camera.transform.position + main_camera.transform.rotation*Vector3(-0.15f,-0.01f,0.15f);
+		var flashlight_hold_pos = main_camera.transform.position + main_camera.transform.rotation*new Vector3(-0.15f,-0.01f,0.15f);
 		var flashlight_hold_rot = main_camera.transform.rotation;
 		
 		var flashlight_pos = flashlight_hold_pos;
@@ -1194,19 +1193,19 @@ public class AimScript : MonoBehaviour
 		
 		held_flashlight.transform.RotateAround(
 			held_flashlight.transform.FindChild("point_recoil_rotate").position,
-			held_flashlight.transform.rotation * Vector3(1,0,0),
+			held_flashlight.transform.rotation * Vector3.right,
 			x_recoil_spring.state * 0.3f);
 		
 		held_flashlight.transform.RotateAround(
 			held_flashlight.transform.FindChild("point_recoil_rotate").position,
-			Vector3(0,1,0),
+			Vector3.up,
 			y_recoil_spring.state * 0.3f);
 		
 		flashlight_pos = held_flashlight.transform.position;
 		flashlight_rot = held_flashlight.transform.rotation;
 		
 		if(gun_instance){
-			flashlight_aim_pos = gun_instance.transform.position + gun_instance.transform.rotation*Vector3(0.07f,-0.03f,0.0f);
+			flashlight_aim_pos = gun_instance.transform.position + gun_instance.transform.rotation* new Vector3(0.07f,-0.03f,0.0f);
 			flashlight_aim_rot = gun_instance.transform.rotation;
 			
 			flashlight_aim_pos -= main_camera.transform.position;
@@ -1222,7 +1221,7 @@ public class AimScript : MonoBehaviour
 			flashlight_rot = mix(flashlight_rot, main_camera.transform.rotation * flashlight_aim_rot, aim_spring.state);
 		} 
 		
-		var flashlight_mouth_pos = main_camera.transform.position + main_camera.transform.rotation*Vector3(0.0f,-0.08f,0.05f);
+		var flashlight_mouth_pos = main_camera.transform.position + main_camera.transform.rotation*new Vector3(0.0f,-0.08f,0.05f);
 		var flashlight_mouth_rot = main_camera.transform.rotation;
 		
 		flashlight_mouth_spring.target_state = 0.0f;
@@ -1262,7 +1261,7 @@ public class AimScript : MonoBehaviour
 		if(mag_stage == HandMagStage.HOLD || mag_stage == HandMagStage.HOLD_TO_INSERT){
 			var mag_script = magazine_instance_in_hand.GetComponent<mag_script>();
 			var hold_pos = main_camera.transform.position + main_camera.transform.rotation*mag_script.hold_offset;
-			var hold_rot = main_camera.transform.rotation * Quaternion.AngleAxis(mag_script.hold_rotation.x, Vector3(0,1,0)) * Quaternion.AngleAxis(mag_script.hold_rotation.y, Vector3(1,0,0));
+			var hold_rot = main_camera.transform.rotation * Quaternion.AngleAxis(mag_script.hold_rotation.x, Vector3.up) * Quaternion.AngleAxis(mag_script.hold_rotation.y, Vector3.right);
 			if(disable_springs){ 
 				hold_pos = mix(hold_pos, mag_ground_pos, mag_ground_pose_spring.target_state);
 				hold_rot = mix(hold_rot, mag_ground_rot, mag_ground_pose_spring.target_state);
@@ -1288,16 +1287,15 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void UpdateInventoryTransformation() {
-		int i  = 0;
 		for(int i=0; i<10; ++i){
 			var slot = weapon_slots[i];
 			if(slot.type == WeaponSlotType.EMPTY){
 				continue;
 			}
-			slot.obj.transform.localScale = Vector3(1.0f,1.0f,1.0f); 
+			slot.obj.transform.localScale = Vector3.one; 
 		}
 		for(int i=0; i<10; ++i){
-			slot = weapon_slots[i];
+			WeaponSlot slot = weapon_slots[i];
 			if(slot.type == WeaponSlotType.EMPTY){
 				continue;
 			}
@@ -1315,33 +1313,29 @@ public class AimScript : MonoBehaviour
 			if(disable_springs){  
 				slot.obj.transform.position = mix(
 					start_pos, 
-					main_camera.transform.position + main_camera.camera.ScreenPointToRay(Vector3(main_camera.camera.pixelWidth * (0.05f + i*0.15f), main_camera.camera.pixelHeight * 0.17f,0)).direction * 0.3f, 
+					main_camera.transform.position + main_camera.camera.ScreenPointToRay(new Vector3(main_camera.camera.pixelWidth * (0.05f + i*0.15f), main_camera.camera.pixelHeight * 0.17f,0)).direction * 0.3f, 
 					slot.spring.target_state);
 				scale = 0.3f * slot.spring.target_state + (1.0f - slot.spring.target_state);
-				slot.obj.transform.localScale.x *= scale;
-				slot.obj.transform.localScale.y *= scale;
-				slot.obj.transform.localScale.z *= scale; 
+				slot.obj.transform.localScale *= scale;
 				slot.obj.transform.rotation = mix(
 					start_rot, 
-					main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3(0,1,0)), 
+					main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3.up), 
 					slot.spring.target_state);
 			} else {  
 				slot.obj.transform.position = mix(
 					start_pos, 
-					main_camera.transform.position + main_camera.camera.ScreenPointToRay(Vector3(main_camera.camera.pixelWidth * (0.05f + i*0.15f), main_camera.camera.pixelHeight * 0.17f,0)).direction * 0.3f, 
+					main_camera.transform.position + main_camera.camera.ScreenPointToRay(new Vector3(main_camera.camera.pixelWidth * (0.05f + i*0.15f), main_camera.camera.pixelHeight * 0.17f,0)).direction * 0.3f, 
 					slot.spring.state);
 				scale = 0.3f * slot.spring.state + (1.0f - slot.spring.state);
-				slot.obj.transform.localScale.x *= scale;
-				slot.obj.transform.localScale.y *= scale;
-				slot.obj.transform.localScale.z *= scale; 
+				slot.obj.transform.localScale *= scale; 
 				slot.obj.transform.rotation = mix(
 					start_rot, 
-					main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3(0,1,0)), 
+					main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3.up), 
 					slot.spring.state);
 			}
-			var renderers = slot.obj.GetComponentsInChildren(Renderer);
-			for( Renderer in renderers){
-				renderer.castShadows  renderer = false; 
+			var renderers = slot.obj.GetComponentsInChildren<Renderer>();
+			foreach(Renderer renderer in renderers){
+				renderer.castShadows = false; 
 			}
 			slot.spring.Update();
 		}
@@ -1357,21 +1351,19 @@ public class AimScript : MonoBehaviour
 		}
 		show_bullet_spring.Update();
 		
-		for(int i = 0; i<loose_bullets.length; ++i){
+		for(int i = 0; i<loose_bullets.Count; ++i){
 			 Spring  spring = loose_bullet_spring[i];
 			spring.Update();
 			 GameObject  bullet = loose_bullets[i];
-			bullet.transform.position = main_camera.transform.position + main_camera.camera.ScreenPointToRay(Vector3(0.0f, main_camera.camera.pixelHeight,0)).direction * 0.3f;
-			bullet.transform.position += main_camera.transform.rotation * Vector3(0.02f,-0.01f,0);
-			bullet.transform.position += main_camera.transform.rotation * Vector3(0.006f * i,0.0f,0);
-			bullet.transform.position += main_camera.transform.rotation * Vector3(-0.03f,0.03f,0) * (1.0f - show_bullet_spring.state);
-			bullet.transform.localScale.x = spring.state;
-			bullet.transform.localScale.y = spring.state;
-			bullet.transform.localScale.z = spring.state;
-			bullet.transform.rotation = main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3(-1,0,0));
-			var renderers = bullet.GetComponentsInChildren(Renderer);
-			for( Renderer in renderers){
-				renderer.castShadows  renderer = false; 
+			bullet.transform.position = main_camera.transform.position + main_camera.camera.ScreenPointToRay(new Vector3(0.0f, main_camera.camera.pixelHeight,0)).direction * 0.3f;
+			bullet.transform.position += main_camera.transform.rotation * new Vector3(0.02f,-0.01f,0);
+			bullet.transform.position += main_camera.transform.rotation * new Vector3(0.006f * i,0.0f,0);
+			bullet.transform.position += main_camera.transform.rotation * new Vector3(-0.03f,0.03f,0) * (1.0f - show_bullet_spring.state);
+			bullet.transform.localScale = new Vector3(spring.state, spring.state, spring.state);
+			bullet.transform.rotation = main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3.left);
+			var renderers = bullet.GetComponentsInChildren<Renderer>();
+			foreach (Renderer renderer in renderers){
+				renderer.castShadows = false; 
 			}
 		}
 	}
@@ -1395,8 +1387,8 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void UpdatePickupMagnet() {
-		var attract_pos = transform.position - Vector3(0,character_controller.height * 0.2f,0);
-		for(int i = 0; i<collected_rounds.length; ++i){
+		var attract_pos = transform.position - new Vector3(0,character_controller.height * 0.2f,0);
+		for(int i = 0; i<collected_rounds.Count; ++i){
 			var round = collected_rounds[i] as GameObject;
 			if(!round){
 				continue;
@@ -1409,13 +1401,13 @@ public class AimScript : MonoBehaviour
 					++unplayed_tapes;
 				} else {
 					AddLooseBullet(true);
-					collected_rounds.splice(i,1);
+					collected_rounds.RemoveAt(i);
 					this.PlaySoundFromGroup(sound_bullet_grab, 0.2f);
 				}
 				GameObject.Destroy(round);
 			}
 		}
-		collected_rounds.remove(null);
+		collected_rounds.Remove(null);
 	}
 	
 	void Update() {
@@ -1454,20 +1446,20 @@ public class AimScript : MonoBehaviour
 	}
 	
 	class DisplayLine {
-		string str ;
-		bool bold ;
+		public string str ;
+		public bool bold ;
 
-		DisplayLine(string _str, bool _bold) {
+		public DisplayLine(string _str, bool _bold) {
 			bold = _bold;
 			str = _str;
 		}
-	};
+	}
 	
 	bool ShouldHolsterGun() {
-		if(!loose_bullets){
-			return;
+		if(loose_bullets == null){
+			return false;
 		}
-		if(loose_bullets.length > 0){
+		if(loose_bullets.Count > 0){
 		} else return false;
 		if(magazine_instance_in_hand){
 		} else return false;
@@ -1477,7 +1469,7 @@ public class AimScript : MonoBehaviour
 	}
 	
 	bool CanLoadBulletsInMag() {
-		return !gun_instance && mag_stage == HandMagStage.HOLD && loose_bullets.length > 0 && !magazine_instance_in_hand.GetComponent<mag_script>().IsFull();
+		return !gun_instance && mag_stage == HandMagStage.HOLD && loose_bullets.Count > 0 && !magazine_instance_in_hand.GetComponent<mag_script>().IsFull();
 	}
 	
 	bool CanRemoveBulletFromMag() {
@@ -1538,12 +1530,12 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void OnGUI() {
-		var display_text = new Array();
+		List<DisplayLine> display_text = new List<DisplayLine> ();
 		 GunScript  gun_script = null;
 		if(gun_instance){
 			gun_script = gun_instance.GetComponent<GunScript>();
 		}
-		display_text.Add(new DisplayLine(tapes_heard.length + " tapes absorbed out of "+total_tapes.length, true));
+		display_text.Add(new DisplayLine(tapes_heard.Count + " tapes absorbed out of "+total_tapes.Count, true));
 		if(!show_help){
 			display_text.Add(new DisplayLine("View help: Press [ ? ]", !help_ever_shown));
 		} else {
@@ -1560,7 +1552,7 @@ public class AimScript : MonoBehaviour
 			if(held_flashlight){
 				var empty_slot = GetEmptySlot();
 				if(empty_slot != -1){
-					var str = "Put flashlight in inventory: tap [ ";
+					string str = "Put flashlight in inventory: tap [ ";
 					str += empty_slot;
 					str += " ]";
 					display_text.Add(new DisplayLine(str, false));
@@ -1568,7 +1560,7 @@ public class AimScript : MonoBehaviour
 			} else {
 				var flashlight_slot = GetFlashlightSlot();
 				if(flashlight_slot != -1){
-					str = "Equip flashlight: tap [ ";
+					string str = "Equip flashlight: tap [ ";
 					str += flashlight_slot;
 					str += " ]";
 					display_text.Add(new DisplayLine(str, true));
@@ -1599,11 +1591,11 @@ public class AimScript : MonoBehaviour
 				}
 				if(gun_script.gun_type == GunType.REVOLVER){
 					if(!gun_script.IsCylinderOpen()){
-						display_text.Add(new DisplayLine("Open cylinder: tap [ e ]", (gun_script.ShouldOpenCylinder() && loose_bullets.length!=0)?true:false));
+						display_text.Add(new DisplayLine("Open cylinder: tap [ e ]", (gun_script.ShouldOpenCylinder() && loose_bullets.Count!=0)?true:false));
 					} else {
-						display_text.Add(new DisplayLine("Close cylinder: tap [ r ]", (gun_script.ShouldCloseCylinder() || loose_bullets.length==0)?true:false));
+						display_text.Add(new DisplayLine("Close cylinder: tap [ r ]", (gun_script.ShouldCloseCylinder() || loose_bullets.Count==0)?true:false));
 						display_text.Add(new DisplayLine("Extract casings: hold [ v ]", gun_script.ShouldExtractCasings()?true:false));
-						display_text.Add(new DisplayLine("Insert bullet: tap [ z ]", (gun_script.ShouldInsertBullet() && loose_bullets.length!=0)?true:false));
+						display_text.Add(new DisplayLine("Insert bullet: tap [ z ]", (gun_script.ShouldInsertBullet() && loose_bullets.Count!=0)?true:false));
 					}
 					display_text.Add(new DisplayLine("Spin cylinder: [ mousewheel ]", false));
 				}
@@ -1627,9 +1619,9 @@ public class AimScript : MonoBehaviour
 				}
 			}
 			if(mag_stage == HandMagStage.HOLD){
-				empty_slot = GetEmptySlot();
+				int empty_slot = GetEmptySlot();
 				if(empty_slot != -1){
-					str = "Put magazine in inventory: tap [ ";
+					string str = "Put magazine in inventory: tap [ ";
 					str += empty_slot;
 					str += " ]";
 					display_text.Add(new DisplayLine(str, ShouldPutMagInInventory()));
@@ -1652,7 +1644,7 @@ public class AimScript : MonoBehaviour
 						display_text.Add(new DisplayLine("Inspect chamber: hold [ t ] and then [ r ]", false));
 					}
 					if(mag_stage == HandMagStage.EMPTY && !gun_script.IsThereAMagInGun()){
-						max_rounds_slot = GetMostLoadedMag();
+						int max_rounds_slot = GetMostLoadedMag();
 						if(max_rounds_slot != -1){
 							display_text.Add(new DisplayLine("Quick load magazine: double tap [ "+max_rounds_slot+" ]", false));
 						}
@@ -1666,21 +1658,21 @@ public class AimScript : MonoBehaviour
 		 GUIStyle  style = holder.gui_skin.label;
 		var width = Screen.width * 0.5f;
 		int offset  = 0;
-		for( DisplayLine in display_text){
+		foreach(DisplayLine line in display_text){
 			if(line.bold){
-				style.fontStyle  line = FontStyle.Bold;
+				style.fontStyle = FontStyle.Bold;
 			} else {
 				style.fontStyle = FontStyle.Normal;
 			}
 			style.fontSize = 18;
-			style.normal.textColor = Color(0,0,0);
-			GUI.Label(Rect(width+0.5f,offset+0.5f,width+0.5f,offset+20+0.5f),line.str, style);
+			style.normal.textColor = new Color(0,0,0);
+			GUI.Label(new Rect(width+0.5f,offset+0.5f,width+0.5f,offset+20+0.5f),line.str, style);
 			if(line.bold){
-				style.normal.textColor = Color(1,1,1);
+				style.normal.textColor = new Color(1,1,1);
 			} else {
-				style.normal.textColor = Color(0.7f,0.7f,0.7f);
+				style.normal.textColor = new Color(0.7f,0.7f,0.7f);
 			}
-			GUI.Label(Rect(width,offset,width,offset+30),line.str, style);
+			GUI.Label(new Rect(width,offset,width,offset+30),line.str, style);
 			offset += 20;
 		}
 		if(dead_fade > 0.0f){
@@ -1688,12 +1680,12 @@ public class AimScript : MonoBehaviour
 				Debug.LogError("Assign a Texture in the inspector.");
 				return;
 			}
-			GUI.color = Color(0,0,0,dead_fade);
-			GUI.DrawTexture(Rect(0,0,Screen.width,Screen.height), texture_death_screen, ScaleMode.StretchToFill, true);
+			GUI.color = new Color(0,0,0,dead_fade);
+			GUI.DrawTexture(new Rect(0,0,Screen.width,Screen.height), texture_death_screen, ScaleMode.StretchToFill, true);
 		}
 		if(win_fade > 0.0f){
-			GUI.color = Color(1,1,1,win_fade);
-			GUI.DrawTexture(Rect(0,0,Screen.width,Screen.height), texture_death_screen, ScaleMode.StretchToFill, true);
+			GUI.color = new Color(1,1,1,win_fade);
+			GUI.DrawTexture(new Rect(0,0,Screen.width,Screen.height), texture_death_screen, ScaleMode.StretchToFill, true);
 		}
 	}
 }

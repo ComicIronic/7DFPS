@@ -4,22 +4,22 @@ using System.Collections;
 public class GUISkinHolder : MonoBehaviour
 {
 	
-	GUISkin gui_skin;
-	 AudioClip[] sound_scream ;
-	 AudioClip[] sound_tape_content ;
-	 AudioClip sound_tape_start ;
-	 AudioClip sound_tape_end ;
-	 AudioClip sound_tape_background ;
-	 GameObject tape_object ;
-	 AudioClip win_sting ;
-	 GameObject[] weapons ;
-	 GameObject weapon ;
-	 GameObject flashlight_object ;
-	bool has_flashlight  = false;
-	
+	public GUISkin gui_skin;
+	public  AudioClip[] sound_scream ;
+	public  AudioClip[] sound_tape_content ;
+	public  AudioClip sound_tape_start ;
+	public  AudioClip sound_tape_end ;
+	public  AudioClip sound_tape_background ;
+	public  GameObject tape_object ;
+	public  AudioClip win_sting ;
+	public  GameObject[] weapons ;
+	public  GameObject weapon ;
+	public  GameObject flashlight_object ;
+	public bool has_flashlight  = false;
+
 	void Awake () {
 		//weapon = weapons[2];
-		weapon = weapons[Random.Range(0,weapons.length)];
+		weapon = weapons[Random.Range(0,weapons.Count)];
 	}
 	
 	void Start () {

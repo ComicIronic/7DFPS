@@ -8,17 +8,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public static class Tools
 {
 	public static void PlaySoundFromGroup(this MonoBehaviour script, AudioClip[] group, float volume) {
-		if (group.Length == 0) {
+		if (group.Count == 0) {
 			return;
 		}
 
-		int which_shot = Random.Range (0, group.Length);
+		int which_shot = Random.Range (0, group.Count);
 		script.gameObject.audio.PlayOneShot (group [which_shot], volume * PlayerPrefs.GetFloat ("sound_volume", 1.0f));
 	}
 
@@ -52,6 +53,12 @@ public static class Tools
 			angle += 360;
 		}
 		return a * Quaternion.AngleAxis(angle * -val, axis);
+	}
+
+	public static T Pop<T>(this List<T> list) {
+		T element = list [0];
+		list.RemoveAt (0);
+		return T;
 	}
 }
 
