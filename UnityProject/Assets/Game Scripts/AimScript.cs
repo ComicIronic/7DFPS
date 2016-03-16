@@ -291,7 +291,7 @@ public class AimScript : MonoBehaviour
 		
 		if(Random.Range(0.0f, 1.0f) < 0.35f){
 			held_flashlight = (GameObject)Instantiate(holder.flashlight_object);
-			Destroy(held_flashlight.rigidbody);
+						Destroy(held_flashlight.GetComponent<Rigidbody>());
 			held_flashlight.GetComponent<FlashlightScript>().TurnOn();
 			holder.has_flashlight = true;
 		}
@@ -301,7 +301,7 @@ public class AimScript : MonoBehaviour
 		gun_instance = (GameObject)Instantiate(gun_obj);
 		var renderers = gun_instance.GetComponentsInChildren<Renderer>();
 		foreach(Renderer renderer in renderers){
-			renderer.castShadows = false; 
+			renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 		}
 		main_camera = GameObject.Find("Main Camera").gameObject;
 		character_controller = GetComponent<CharacterController>();
@@ -1335,7 +1335,7 @@ public class AimScript : MonoBehaviour
 			}
 			var renderers = slot.obj.GetComponentsInChildren<Renderer>();
 			foreach(Renderer renderer in renderers){
-				renderer.castShadows = false; 
+				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 			slot.spring.Update();
 		}
@@ -1363,7 +1363,7 @@ public class AimScript : MonoBehaviour
 			bullet.transform.rotation = main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3.left);
 			var renderers = bullet.GetComponentsInChildren<Renderer>();
 			foreach (Renderer renderer in renderers){
-				renderer.castShadows = false; 
+				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 		}
 	}

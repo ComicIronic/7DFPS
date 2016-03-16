@@ -198,7 +198,7 @@ public class GunScript : MonoBehaviour
 			
 			var renderers = magazine_instance_in_gun.GetComponentsInChildren<Renderer>();
 			foreach(Renderer renderer in renderers){
-				renderer.castShadows = false; 
+				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 			
 			if(Random.Range(0,2) == 0){
@@ -207,7 +207,7 @@ public class GunScript : MonoBehaviour
 				round_in_chamber.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
 				renderers = round_in_chamber.GetComponentsInChildren<Renderer>();
 				foreach(Renderer renderer in renderers){
-					renderer.castShadows = false; 
+					renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 				}
 			}
 			
@@ -232,7 +232,7 @@ public class GunScript : MonoBehaviour
 				List<Renderer> renderers = cState.gameObject.GetComponentsInChildren<Renderer>();
 				cylinders[i] = cState;
 				foreach(Renderer renderer in renderers){
-					renderer.castShadows = false; 
+					renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 				}
 			}
 		}
