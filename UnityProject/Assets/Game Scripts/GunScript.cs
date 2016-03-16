@@ -114,15 +114,15 @@ public class GunScript : MonoBehaviour
 	private Vector3 extractor_rod_rel_pos;
 	bool disable_springs  = false;
 	
-	class CylinderState {
-		GameObject  gameObject = null;
-		bool  can_fire= false;
-		float  seated= 0.0f;
-		bool  falling= false;
+	public class CylinderState {
+		public GameObject  gameObject = null;
+		public bool  can_fire= false;
+		public float  seated= 0.0f;
+		public bool  falling= false;
 	};
 	
 	private int cylinder_capacity  = 6;
-	CylinderState[] cylinders;
+	public CylinderState[] cylinders;
 	
 	public bool IsAddingRounds() {
 		if(yolk_stage == YolkStage.OPEN){
@@ -193,21 +193,21 @@ public class GunScript : MonoBehaviour
 		}
 		
 		if(gun_type == GunType.AUTOMATIC){
-			magazine_instance_in_gun = (GameObject)Instantiate(magazine_obj);
+			GameObject magazine_instance_in_gun = (GameObject)Instantiate(magazine_obj);
 			magazine_instance_in_gun.transform.parent = transform;
 			
-			var renderers = magazine_instance_in_gun.GetComponentsInChildren(Renderer);
-			for(Renderer in renderers){
-				renderer.castShadows  renderer= false; 
+			var renderers = magazine_instance_in_gun.GetComponentsInChildren<Renderer>();
+			foreach(Renderer renderer in renderers){
+				renderer.castShadows = false; 
 			}
 			
 			if(Random.Range(0,2) == 0){
-				round_in_chamber = (GameObject)Instantiate(casing_with_bullet, transform.FindChild("point_chambered_round").position, transform.FindChild("point_chambered_round").rotation);
+				GameObject round_in_chamber = (GameObject)Instantiate(casing_with_bullet, transform.FindChild("point_chambered_round").position, transform.FindChild("point_chambered_round").rotation);
 				round_in_chamber.transform.parent = transform;
-				round_in_chamber.transform.localScale = Vector3(1.0f,1.0f,1.0f);
-				renderers = round_in_chamber.GetComponentsInChildren(Renderer);
-				for(Renderer in renderers){
-					renderer.castShadows  renderer= false; 
+				round_in_chamber.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+				renderers = round_in_chamber.GetComponentsInChildren<Renderer>();
+				foreach(Renderer renderer in renderers){
+					renderer.castShadows = false; 
 				}
 			}
 			
@@ -220,18 +220,19 @@ public class GunScript : MonoBehaviour
 		if(gun_type == GunType.REVOLVER){
 			cylinders = new CylinderState[cylinder_capacity];
 			for(int i = 0; i<cylinder_capacity; ++i){
-				cylinders[i] = new CylinderState();
+				CylinderState cState = new CylinderState();
 				if(Random.Range(0,2) == 0){
 					continue;
 				}
 				var name = "point_chamber_"+(i+1);
-				cylinders[i].object = (GameObject)Instantiate(casing_with_bullet, extractor_rod.FindChild(name).position, extractor_rod.FindChild(name).rotation);
-				cylinders[i].object.transform.localScale = Vector3(1.0f,1.0f,1.0f);
-				cylinders[i].can_fire = true;
-				cylinders[i].seated = Random.Range(0.0f, 0.5f);
-				renderers = cylinders[i].object.GetComponentsInChildren(Renderer);
-				for(Renderer in renderers){
-					renderer.castShadows  renderer= false; 
+				cState.gameObject = (GameObject)Instantiate(casing_with_bullet, extractor_rod.FindChild(name).position, extractor_rod.FindChild(name).rotation);
+				cState.gameObject.transform.localScale = Vector3.one;
+				cState.can_fire = true;
+				cState.seated = Random.Range(0.0f, 0.5f);
+				List<Renderer> renderers = cState.gameObject.GetComponentsInChildren<Renderer>();
+				cylinders[i] = cState;
+				foreach(Renderer renderer in renderers){
+					renderer.castShadows = false; 
 				}
 			}
 		}

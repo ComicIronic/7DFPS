@@ -19,7 +19,7 @@ public class GUISkinHolder : MonoBehaviour
 
 	void Awake () {
 		//weapon = weapons[2];
-		weapon = weapons[Random.Range(0,weapons.Count)];
+		weapon = weapons[Random.Range(0,weapons.Length)];
 	}
 	
 	void Start () {

@@ -8,7 +8,7 @@ public class FlashlightScript : MonoBehaviour
 	AudioClip sound_turn_off;
 	private float kSoundVolume  = 0.3f;
 	private bool switch_on  = false;
-	private float max_battery_life  = 60*60*5.5f;
+	private static float max_battery_life  = 60*60*5.5f;
 	private float battery_life_remaining = max_battery_life;
 	
 	private float initial_pointlight_intensity;

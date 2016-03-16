@@ -3,7 +3,7 @@ using System.Collections;
 
 
 // Require a character controller to be attached to the same game object
-[RequireComponent(CharacterMotor)]
+[RequireComponent(typeof(CharacterMotor))]
 [AddComponentMenu("Character/FPS Input Controller")]
 public class FPSInputController : MonoBehaviour
 {
