@@ -3,27 +3,27 @@ using System.Collections;
 
 public class taser_spark : MonoBehaviour
 {
-	float opac  = 0.0f;
+	protected float opac  = 0.0f;
 	
-	void UpdateColor() {
-		var renderers = transform.GetComponentsInChildren(MeshRenderer);
-		var color = Vector4(opac,opac,opac,opac);
-		for(MeshRenderer in renderers){
-			renderer.material.SetColor("_TintColor", color) renderer;
+	protected void UpdateColor() {
+		var renderers = transform.GetComponentsInChildren<MeshRenderer>();
+		var color = new Vector4(opac,opac,opac,opac);
+		foreach(MeshRenderer renderer in renderers){
+			renderer.material.SetColor("_TintColor", color);
 		}
-		var lights = transform.GetComponentsInChildren(Light);
-		for(Light in lights){
-			light.intensity  light= opac * 2.0f;
+		var lights = transform.GetComponentsInChildren<Light>();
+		foreach(Light light in lights){
+			light.intensity = opac * 2.0f;
 		}
 	}
 	
 	void Start () {
 		opac = Random.Range(0.4f, 1.0f);
 		UpdateColor();
-		transform.localRotation.eulerAngles.z = Random.Range(0.0f, 360.0f);
-		transform.localScale.x = Random.Range(0.8f, 2.0f);
-		transform.localScale.y = Random.Range(0.8f, 2.0f);
-		transform.localScale.z = Random.Range(0.8f, 2.0f);
+
+        transform.localEulerAngles = Tools.SetDimension(transform.localEulerAngles, 'z', Random.Range(0.0f, 360.0f));
+
+        transform.localScale = new Vector3(Random.Range(0.8f, 2.0f), Random.Range(0.8f, 2.0f), Random.Range(0.8f, 2.0f));
 	}
 	
 	void Update() {

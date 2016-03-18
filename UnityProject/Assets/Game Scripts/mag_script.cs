@@ -31,21 +31,21 @@ private void Start () {
 
 		for (int i = 0; i<kMaxRounds; ++i) {
 			//Locates where rounds go from the model
-			var round = transform.FindChild ("round_" + (i + 1));
+			var round = transform.Find ("round_" + (i + 1));
 			round_pos [i] = round.localPosition;
 			round_rot [i] = round.localRotation;
 			if (i < num_rounds) {
-				round.renderer.enabled = true;
+				round.GetComponent<Renderer>().enabled = true;
 			} else {
 				//TODO Find out why this is false? why not render the last bullet?
-				round.renderer.enabled = false;
+				round.GetComponent<Renderer>().enabled = false;
 			}
 		}
 	}
 
 void Update() {
 			switch (mag_load_stage) {
-			case MagLoadStage.AddING_DOWN:
+			case MagLoadStage.PUSHING_DOWN:
 					mag_load_progress += Time.deltaTime * 20.0f;
 					if (mag_load_progress >= 1.0f) {
 							mag_load_stage = MagLoadStage.ADDING_ROUND;
@@ -58,7 +58,7 @@ void Update() {
 							mag_load_stage = MagLoadStage.NONE;
 							mag_load_progress = 0.0f;
 							for (int i = 0; i<num_rounds; ++i) {
-									var obj = transform.FindChild ("round_" + (i + 1));
+					Transform obj = transform.Find ("round_" + (i + 1));
 									obj.localPosition = round_pos [i];
 									obj.localRotation = round_rot [i];
 							}
@@ -71,7 +71,7 @@ void Update() {
 							mag_load_progress = 0.0f;
 							RemoveRound ();
 							for(int i=0; i<num_rounds; ++i) {
-									obj = transform.FindChild ("round_" + (i + 1));
+					Transform obj = transform.Find ("round_" + (i + 1));
 									obj.localPosition = round_pos [i];
 									obj.localRotation = round_rot [i];
 							}
@@ -90,57 +90,57 @@ void Update() {
 					mag_load_progress_display = Mathf.Floor (mag_load_progress + 0.5f);
 			}
 			switch (mag_load_stage) {
-			case MagLoadStage.AddING_DOWN:
-					GameObject obj = gameObject.transform.FindChild ("round_1");
-					obj.transform.localPosition = Vector3.Lerp (transform.FindChild ("point_start_load").localPosition, 
-		                                 transform.FindChild ("point_load").localPosition, 
+			case MagLoadStage.PUSHING_DOWN:
+					Transform obj = gameObject.transform.Find ("round_1");
+					obj.transform.localPosition = Vector3.Lerp (transform.Find ("point_start_load").localPosition, 
+		                                 transform.Find ("point_load").localPosition, 
 		                                 mag_load_progress_display);
-					obj.transform.localRotation = Quaternion.Slerp (transform.FindChild ("point_start_load").localRotation, 
-		                                     transform.FindChild ("point_load").localRotation, 
+					obj.transform.localRotation = Quaternion.Slerp (transform.Find ("point_start_load").localRotation, 
+		                                     transform.Find ("point_load").localRotation, 
 		                                     mag_load_progress_display);
 					for(int i=1; i<num_rounds; ++i) {
-							obj = transform.FindChild ("round_" + (i + 1));
+							obj = transform.Find ("round_" + (i + 1));
 							obj.transform.localPosition = Vector3.Lerp (round_pos [i - 1], round_pos [i], mag_load_progress_display);
 							obj.transform.localRotation = Quaternion.Slerp (round_rot [i - 1], round_rot [i], mag_load_progress_display);
 					}
 					break;
 			case MagLoadStage.ADDING_ROUND:
-					obj = transform.FindChild ("round_1");
-					obj.localPosition = Vector3.Lerp (transform.FindChild ("point_load").localPosition, 
+					obj = transform.Find ("round_1");
+					obj.localPosition = Vector3.Lerp (transform.Find ("point_load").localPosition, 
 		                                 round_pos [0], 
 		                                 mag_load_progress_display);
-					obj.localRotation = Quaternion.Slerp (transform.FindChild ("point_load").localRotation, 
+					obj.localRotation = Quaternion.Slerp (transform.Find ("point_load").localRotation, 
 		                                     round_rot [0], 
 		                                     mag_load_progress_display);
 					for(int i=1; i<num_rounds; ++i) {
-							obj = transform.FindChild ("round_" + (i + 1));
+							obj = transform.Find ("round_" + (i + 1));
 							obj.localPosition = round_pos [i];
 					}
 					break;
 			case MagLoadStage.PUSHING_UP:
-					obj = transform.FindChild ("round_1");
-					obj.localPosition = Vector3.Lerp (transform.FindChild ("point_start_load").localPosition, 
-		                                 transform.FindChild ("point_load").localPosition, 
+					obj = transform.Find ("round_1");
+					obj.localPosition = Vector3.Lerp (transform.Find ("point_start_load").localPosition, 
+		                                 transform.Find ("point_load").localPosition, 
 		                                 1.0f - mag_load_progress_display);
-					obj.localRotation = Quaternion.Slerp (transform.FindChild ("point_start_load").localRotation, 
-		                                     transform.FindChild ("point_load").localRotation, 
+					obj.localRotation = Quaternion.Slerp (transform.Find ("point_start_load").localRotation, 
+		                                     transform.Find ("point_load").localRotation, 
 		                                     1.0f - mag_load_progress_display);
 					for(int i=1; i<num_rounds; ++i) {
-							obj = transform.FindChild ("round_" + (i + 1));
+							obj = transform.Find ("round_" + (i + 1));
 							obj.localPosition = Vector3.Lerp (round_pos [i - 1], round_pos [i], mag_load_progress_display);
 							obj.localRotation = Quaternion.Slerp (round_rot [i - 1], round_rot [i], mag_load_progress_display);
 					}
 					break;
 			case MagLoadStage.REMOVING_ROUND:
-					obj = transform.FindChild ("round_1");
-					obj.localPosition = Vector3.Lerp (transform.FindChild ("point_load").localPosition, 
+					obj = transform.Find ("round_1");
+					obj.localPosition = Vector3.Lerp (transform.Find ("point_load").localPosition, 
 		                                 round_pos [0], 
 		                                 1.0f - mag_load_progress_display);
-					obj.localRotation = Quaternion.Slerp (transform.FindChild ("point_load").localRotation, 
+					obj.localRotation = Quaternion.Slerp (transform.Find ("point_load").localRotation, 
 		                                     round_rot [0], 
 		                                     1.0f - mag_load_progress_display);
 					for(int i=1; i<num_rounds; ++i) {
-							obj = transform.FindChild ("round_" + (i + 1));
+							obj = transform.Find ("round_" + (i + 1));
 							obj.localPosition = round_pos [i];
 							obj.localRotation = round_rot [i];
 					}
@@ -148,12 +148,12 @@ void Update() {
 			}
 	}
 
-bool RemoveRound() {
+public bool RemoveRound() {
 			if (num_rounds == 0) {
 					return false;
 			}
-			var round_obj = transform.FindChild ("round_" + num_rounds);
-			round_obj.renderer.enabled = false;
+			var round_obj = transform.Find ("round_" + num_rounds);
+			round_obj.GetComponent<Renderer>().enabled = false;
 			num_rounds--;
 			return true;
 	}
@@ -175,12 +175,12 @@ public bool AddRound() {
 			if (num_rounds >= kMaxRounds || mag_load_stage != MagLoadStage.NONE) {
 					return false;
 			}
-			mag_load_stage = MagLoadStage.AddING_DOWN;
+			mag_load_stage = MagLoadStage.PUSHING_DOWN;
 			mag_load_progress = 0.0f;
 			this.PlaySoundFromGroup (sound_add_round, 0.3f);
 			++num_rounds;
-			var round_obj = transform.FindChild ("round_" + num_rounds);
-			round_obj.renderer.enabled = true;
+			var round_obj = transform.Find ("round_" + num_rounds);
+			round_obj.GetComponent<Renderer>().enabled = true;
 			return true;
 	}
 
@@ -196,15 +196,17 @@ void CollisionSound() {
 	}
 
 void FixedUpdate () {
-		if (rigidbody && !rigidbody.IsSleeping () && collider && collider.enabled) {
+    Rigidbody rigidbody = GetComponent<Rigidbody>();
+    Collider collider = GetComponent<Collider>();
+		if (rigidbody && !GetComponent<Rigidbody>().IsSleeping () && collider && collider.enabled) {
 			life_time += Time.deltaTime;
 			RaycastHit hit;
-			if (Physics.Linecast (old_pos, transform.position, hit, 1)) {
+			if (Physics.Linecast (old_pos, transform.position, out hit, 1)) {
 				transform.position = hit.point;
-				transform.rigidbody.velocity *= -0.3f;
+				transform.GetComponent<Rigidbody>().velocity *= -0.3f;
 			}
 			if (life_time > 2.0f) {
-				rigidbody.Sleep ();
+				GetComponent<Rigidbody>().Sleep ();
 			}
 		} else if (!rigidbody) {
 			life_time = 0.0f;

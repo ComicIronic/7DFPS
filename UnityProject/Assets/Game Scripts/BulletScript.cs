@@ -25,12 +25,12 @@ public class BulletScript : MonoBehaviour
 	private int segment = 1;
 	private bool hostile = false;
 	
-	void SetVelocity(Vector3 vel){
+	public void SetVelocity(Vector3 vel){
 		this.velocity = vel;
 	}
 	
-	void SetHostile() {
-		audio.rolloffMode = AudioRolloffMode.Logarithmic;
+	public void SetHostile() {
+		GetComponent<AudioSource>().rolloffMode = AudioRolloffMode.Logarithmic;
 		this.PlaySoundFromGroup(sound_flyby, 0.4f);
 		hostile = true;
 	}
@@ -74,8 +74,8 @@ public class BulletScript : MonoBehaviour
 						}
 					}					
 				}
-				if(hit_transform_obj.rigidbody){
-					hit_transform_obj.rigidbody.AddForceAtPosition(velocity * 0.01f, hit.point, ForceMode.Impulse);
+				if(hit_transform_obj.GetComponent<Rigidbody>()){
+					hit_transform_obj.GetComponent<Rigidbody>().AddForceAtPosition(velocity * 0.01f, hit.point, ForceMode.Impulse);
 				}
 				if(light_script){
 					light_script.WasShot(hit_obj, hit.point, velocity);

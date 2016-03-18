@@ -3,19 +3,19 @@ using System.Collections;
 
 public class optionsmenuscript : MonoBehaviour
 {
-	GUISkin skin;
-	Rect windowRect;
-	int menu_width  = 300;
-	int menu_height  = 500;
-	bool show_menu  = false;
+	public GUISkin skin;
+    public Rect windowRect;
+    public int menu_width = 300;
+    public int menu_height = 500;
+    public bool show_menu = false;
 	
-	void OnApplicationPause() {  
-		Screen.lockCursor = false;
+	void OnApplicationPause() {
+        Cursor.lockState = CursorLockMode.None;
 	}
 	
 	void OnApplicationFocus() {
 		if(!show_menu){
-			Screen.lockCursor = true;
+            Cursor.lockState = CursorLockMode.Locked;
 		}
 	}
 	
@@ -33,7 +33,7 @@ public class optionsmenuscript : MonoBehaviour
 		}
 		windowRect = GUI.Window (
 			0, 
-			Rect(Screen.width*0.5f - menu_width*0.5f, Screen.height*0.5f - menu_height*0.5f, menu_width, menu_height), 
+			new Rect(Screen.width*0.5f - menu_width*0.5f, Screen.height*0.5f - menu_height*0.5f, menu_width, menu_height), 
 			WindowFunction, 
 			"",
 			skin.window);
@@ -45,12 +45,12 @@ public class optionsmenuscript : MonoBehaviour
 	private int line_offset  = 24;
 	
 	void DrawCursor_Init() {
-		draw_cursor = Vector2(25,25);
-		draw_cursor_line = Vector2(0,0);	
+		draw_cursor = new Vector2(25,25);
+		draw_cursor_line = new Vector2(0,0);	
 	}
 	
 	void DrawCursor_NextLine() {
-		draw_cursor_line = Vector2(0,0);	
+		draw_cursor_line = new Vector2(0,0);	
 		draw_cursor.y += line_offset;
 	}
 	
@@ -63,7 +63,7 @@ public class optionsmenuscript : MonoBehaviour
 	}
 	
 	Rect DrawCursor_RectSpace(float width) {
-		Rect rect = Rect(draw_cursor.x + draw_cursor_line.x,
+		Rect rect = new Rect(draw_cursor.x + draw_cursor_line.x,
 		                draw_cursor.y + draw_cursor_line.y,
 		                width,
 		                line_height);
@@ -116,7 +116,7 @@ public class optionsmenuscript : MonoBehaviour
 	private float mouse_sensitivity  = 0.2f;
 	private bool show_advanced_sound  = false;
 	private bool toggle_crouch  = true;
-	private Vector2 scroll_view_vector = Vector2(0,0);
+	private Vector2 scroll_view_vector = new Vector2(0,0);
 	private float vert_scroll  = 0.0f;
 	private float vert_scroll_pixels  = 0.0f;
 	private float gun_distance  = 1.0f;
@@ -133,7 +133,7 @@ public class optionsmenuscript : MonoBehaviour
 	}
 	
 	void Start() {
-		Screen.lockCursor = true;
+        Cursor.lockState = CursorLockMode.Locked;
 		RestoreDefaults();
 		master_volume = PlayerPrefs.GetFloat("master_volume", master_volume);
 		sound_volume = PlayerPrefs.GetFloat("sound_volume", sound_volume);
@@ -168,14 +168,14 @@ public class optionsmenuscript : MonoBehaviour
 			vert_scroll += Input.GetAxis("Mouse ScrollWheel");
 		}
 		if(Input.GetKeyDown ("escape") && !show_menu){
-			Screen.lockCursor = false;
+            Cursor.lockState = CursorLockMode.None;
 			ShowMenu();
 		} else if(Input.GetKeyDown ("escape") && show_menu){
-			Screen.lockCursor = true;
+            Cursor.lockState = CursorLockMode.Locked;
 			HideMenu();
 		}
 		if(Input.GetMouseButtonDown(0) && !show_menu){
-			Screen.lockCursor = true;
+            Cursor.lockState = CursorLockMode.Locked;
 		}
 		if(show_menu){
 			Time.timeScale = 0.0f;
@@ -189,9 +189,9 @@ public class optionsmenuscript : MonoBehaviour
 	void WindowFunction (int windowID) {
 		
 		scroll_view_vector = GUI.BeginScrollView (
-			Rect (0, 0, windowRect.width, windowRect.height), 
+			new Rect (0, 0, windowRect.width, windowRect.height), 
 			scroll_view_vector, 
-			Rect (0, vert_scroll_pixels, windowRect.width, windowRect.height));
+			new Rect (0, vert_scroll_pixels, windowRect.width, windowRect.height));
 		
 		DrawCursor_Init();
 		mouse_invert = DrawCheckbox(mouse_invert, "Invert mouse");
@@ -237,7 +237,7 @@ public class optionsmenuscript : MonoBehaviour
 			DrawCursor_NextLine();
 		}
 		if(DrawButton("Resume")){
-			Screen.lockCursor = true;
+            Cursor.lockState = CursorLockMode.Locked;
 			show_menu = false;
 		}
 		draw_cursor.y += line_offset * 0.3f;
@@ -261,7 +261,7 @@ public class optionsmenuscript : MonoBehaviour
 				vert_scroll = leeway;
 			}
 			vert_scroll = GUI.VerticalScrollbar (
-				Rect (menu_width-20, 20, menu_width, menu_height-25), 
+				new Rect (menu_width-20, 20, menu_width, menu_height-25), 
 				vert_scroll, 
 				windowRect.height / content_height,
 				content_height / windowRect.height, 

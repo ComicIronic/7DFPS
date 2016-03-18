@@ -11,19 +11,22 @@ public class tapescript : MonoBehaviour
 	}
 	
 	void Update () {
-		transform.FindChild("light_obj").light.intensity = 1.0f + Mathf.Sin(Time.time * 2.0f);
+		transform.Find("light_obj").GetComponent<Light>().intensity = 1.0f + Mathf.Sin(Time.time * 2.0f);
 	}
 	
 	void FixedUpdate() {
-		if(rigidbody && !rigidbody.IsSleeping() && collider && collider.enabled){
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        Collider collider = GetComponent<Collider>();
+        if (rigidbody && !rigidbody.IsSleeping() && collider && collider.enabled)
+        {
 			life_time += Time.deltaTime;
 			RaycastHit hit;
-			if(Physics.Linecast(old_pos, transform.position, hit, 1)){
+			if(Physics.Linecast(old_pos, transform.position, out hit, 1)){
 				transform.position = hit.point;
-				transform.rigidbody.velocity *= -0.3f;
+				transform.GetComponent<Rigidbody>().velocity *= -0.3f;
 			}
 			if(life_time > 2.0f){
-				rigidbody.Sleep();
+				GetComponent<Rigidbody>().Sleep();
 			}
 		}
 		old_pos = transform.position;

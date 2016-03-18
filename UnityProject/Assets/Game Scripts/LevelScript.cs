@@ -4,34 +4,34 @@ using System.Collections;
 public class LevelScript : MonoBehaviour
 {
 	void Start () {
-		var enemies = transform.FindChild("enemies");
+		var enemies = transform.Find("enemies");
 		if(enemies){
-			for( Transform in enemies){
+			foreach(Transform child in enemies){
 				if(Random.Range(0.0f, 1.0f) < 0.9f){
-					GameObject.Destroy(child.gameObject) child ;
+					GameObject.Destroy (child.gameObject);
 				}
 			}
 		}
-		var players = transform.FindChild("player_spawn");
+		var players = transform.Find("player_spawn");
 		if(players){
 			int num  = 0;
-			for( Transform in players){
-				++num child ;
+			foreach(Transform child in players){
+				++num;
 			}
 			var save = Random.Range(0,num);
 			int j = 0;
-			for( Transform in players){
-				if(j ! child = save){
+			foreach(Transform child in players){
+				if(j != save){
 					GameObject.Destroy(child.gameObject);
 				}
 				++j;
 			}
 		}
-		var items = transform.FindChild("items");
+		var items = transform.Find("items");
 		if(items){
-			for( Transform in items){
+			foreach(Transform child in items){
 				if(Random.Range(0.0f, 1.0f) < 0.9f){
-					GameObject.Destroy(child.gameObject) child ;
+					GameObject.Destroy(child.gameObject);
 				}
 			}
 		}

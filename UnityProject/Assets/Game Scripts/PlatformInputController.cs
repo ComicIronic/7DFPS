@@ -3,7 +3,7 @@ using System.Collections;
 
 
 // Require a character controller to be attached to the same game object
-[RequireComponent(CharacterMotor)]
+[RequireComponent(typeof(CharacterMotor))]
 [AddComponentMenu("Character/Platform Input Controller")]
 public class PlatformInputController : MonoBehaviour
 {
@@ -53,7 +53,7 @@ public class PlatformInputController : MonoBehaviour
 		
 		// Set rotation to the move direction	
 		if (autoRotate && directionVector.sqrMagnitude > 0.01f) {
-			Vector3  newForward= ConstantSlerp(
+			Vector3 newForward = ConstantSlerp(
 				transform.forward,
 				directionVector,
 				maxRotationSpeed * Time.deltaTime
@@ -63,11 +63,11 @@ public class PlatformInputController : MonoBehaviour
 		}
 	}
 	
-	void ProjectOntoPlane (Vector3 v, Vector3 normal) {
+	public Vector3 ProjectOntoPlane (Vector3 v, Vector3 normal) {
 		return v - Vector3.Project(v, normal);
 	}
 	
-	void ConstantSlerp (Vector3 from, Vector3 to, float angle) {
+	public Vector3 ConstantSlerp (Vector3 from, Vector3 to, float angle) {
 		float  value= Mathf.Min(1, angle / Vector3.Angle(from, to));
 		return Vector3.Slerp(from, to, value);
 	}

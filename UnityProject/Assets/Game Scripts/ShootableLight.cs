@@ -5,7 +5,7 @@ public class ShootableLight : MonoBehaviour
 {
 	
 	GameObject destroy_effect;
-	Color light_color = Color(1,1,1);
+	Color light_color = new Color(1,1,1);
 	bool destroyed  = false;
 	public enum LightType {AIRPLANE_BLINK, NORMAL, FLICKER}
 	public LightType light_type = LightType.NORMAL;
@@ -17,9 +17,11 @@ public class ShootableLight : MonoBehaviour
 		if(!destroyed){
 			destroyed = true;
 			light_amount = 0.0f;
-			(GameObject)Instantiate(destroy_effect, transform.FindChild("bulb").position, Quaternion.identity);
+
+			Instantiate(destroy_effect, transform.Find("bulb").position, Quaternion.identity);
 		}
-		if(obj && obj.collider && obj.collider.material.name == "glass (Instance)"){
+        if (obj && obj.GetComponent<Collider>() && obj.GetComponent<Collider>().material.name == "glass (Instance)")
+        {
 			GameObject.Destroy(obj);
 		}
 	}
@@ -45,12 +47,12 @@ public class ShootableLight : MonoBehaviour
 			}
 		}
 		
-		var combined_color = Color(light_color.r * light_amount,light_color.g * light_amount,light_color.b * light_amount);
-		for(Light in gameObject.GetComponentsInChildren(Light)){
-			light.color  light= combined_color;
+		var combined_color = new Color(light_color.r * light_amount,light_color.g * light_amount,light_color.b * light_amount);
+		foreach(Light light in gameObject.GetComponentsInChildren<Light>()){
+			light.color = combined_color;
 		}
-		for(MeshRenderer in gameObject.GetComponentsInChildren(MeshRenderer)){
-			renderer.material.SetColor("_Illum", combined_color) renderer;
+		foreach(MeshRenderer renderer in gameObject.GetComponentsInChildren<MeshRenderer>()){
+			renderer.material.SetColor("_Illum", combined_color);
 			if(renderer.gameObject.name == "shade"){
 				renderer.material.SetColor("_Illum", combined_color * 0.5f);
 			}

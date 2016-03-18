@@ -301,7 +301,7 @@ public class AimScript : MonoBehaviour
 		gun_instance = (GameObject)Instantiate(gun_obj);
 		var renderers = gun_instance.GetComponentsInChildren<Renderer>();
 		foreach(Renderer renderer in renderers){
-			renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
+			GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 		}
 		main_camera = GameObject.Find("Main Camera").gameObject;
 		character_controller = GetComponent<CharacterController>();
@@ -395,11 +395,11 @@ public class AimScript : MonoBehaviour
 		float nearest_mag_dist  = 0.0f;
 		Collider[] colliders = Physics.OverlapSphere(main_camera.transform.position, 2.0f, 1 << 8);
 		foreach(Collider collider in colliders){
-			if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.rigidbody){
+			if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 				if(mag_stage == HandMagStage.EMPTY){
 					return true;
 				}	
-			} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.rigidbody){
+			} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent<Rigidbody>()){
 				return true;
 			}
 		}
@@ -411,25 +411,25 @@ public class AimScript : MonoBehaviour
 		float nearest_mag_dist  = 0.0f;
 		var colliders = Physics.OverlapSphere(main_camera.transform.position, 2.0f, 1 << 8);
 		foreach(var collider in colliders){
-			if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.rigidbody){
+			if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 				var dist = Vector3.Distance(collider.transform.position, main_camera.transform.position);
 				if(!nearest_mag || dist < nearest_mag_dist){	
 					nearest_mag_dist = dist;
 					nearest_mag = collider.gameObject;
 				}					
-			} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.rigidbody){
+			} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent<Rigidbody>()){
 				collected_rounds.Add(collider.gameObject);			
-				collider.gameObject.rigidbody.useGravity = false;
-				collider.gameObject.rigidbody.WakeUp();
+				collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
+				collider.gameObject.GetComponent<Rigidbody>().WakeUp();
 				collider.enabled = false;
-			} else if(collider.gameObject.name == "cassette_tape(Clone)" && collider.gameObject.rigidbody){
+			} else if(collider.gameObject.name == "cassette_tape(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 				collected_rounds.Add(collider.gameObject);			
-				collider.gameObject.rigidbody.useGravity = false;
-				collider.gameObject.rigidbody.WakeUp();
+				collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
+				collider.gameObject.GetComponent<Rigidbody>().WakeUp();
 				collider.enabled = false;
-			} else if(collider.gameObject.name == "flashlight_object(Clone)" && collider.gameObject.rigidbody && !held_flashlight){
+			} else if(collider.gameObject.name == "flashlight_object(Clone)" && collider.gameObject.GetComponent<Rigidbody>() && !held_flashlight){
 				held_flashlight = collider.gameObject;
-				Destroy(held_flashlight.rigidbody);
+				Destroy(held_flashlight.GetComponent<Rigidbody>());
 				held_flashlight.GetComponent<FlashlightScript>().TurnOn();
 				holder.has_flashlight = true;
 				flash_ground_pos = held_flashlight.transform.position;
@@ -440,7 +440,7 @@ public class AimScript : MonoBehaviour
 		}
 		if(nearest_mag && mag_stage == HandMagStage.EMPTY){
 			magazine_instance_in_hand = nearest_mag;
-			Destroy(magazine_instance_in_hand.rigidbody);
+			Destroy(magazine_instance_in_hand.GetComponent<Rigidbody>());
 			mag_ground_pos = magazine_instance_in_hand.transform.position;
 			mag_ground_rot = magazine_instance_in_hand.transform.rotation;
 			mag_ground_pose_spring.state = 1.0f;
@@ -761,8 +761,8 @@ public class AimScript : MonoBehaviour
 			if(mag_stage == HandMagStage.HOLD){
 				mag_stage = HandMagStage.EMPTY;
 				magazine_instance_in_hand.AddComponent<Rigidbody>();
-				magazine_instance_in_hand.rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-				magazine_instance_in_hand.rigidbody.velocity = character_controller.velocity;
+				magazine_instance_in_hand.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
+				magazine_instance_in_hand.GetComponent<Rigidbody>().velocity = character_controller.velocity;
 				magazine_instance_in_hand = null;
 				queue_drop = false;
 			}
@@ -813,7 +813,7 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void StartTapePlay() {
-		audio.PlayOneShot(holder.sound_tape_start, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
+		GetComponent<AudioSource>().PlayOneShot(holder.sound_tape_start, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
 		audiosource_tape_background.Play();
 		if(tape_in_progress && start_tape_delay == 0.0f){ 
 			audiosource_audio_content.Play();
@@ -832,7 +832,7 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void StopTapePlay() {
-		audio.PlayOneShot(holder.sound_tape_end, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
+		GetComponent<AudioSource>().PlayOneShot(holder.sound_tape_end, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
 		if(tape_in_progress){
 			audiosource_tape_background.Pause();
 			audiosource_audio_content.Pause();
@@ -848,7 +848,7 @@ public class AimScript : MonoBehaviour
 	}
 	
 	void ApplyPose(string name, float amount) {
-		var pose = gun_instance.transform.FindChild(name);
+		var pose = gun_instance.transform.Find(name);
 		if(amount == 0.0f || !pose){
 			return;
 		}
@@ -1170,12 +1170,12 @@ public class AimScript : MonoBehaviour
 		
 		if(!disable_recoil){		
 			gun_instance.transform.RotateAround(
-				gun_instance.transform.FindChild("point_recoil_rotate").position,
+				gun_instance.transform.Find("point_recoil_rotate").position,
 				gun_instance.transform.rotation * new Vector3(1,0,0),
 				x_recoil_spring.state);
 			
 			gun_instance.transform.RotateAround(
-				gun_instance.transform.FindChild("point_recoil_rotate").position,
+				gun_instance.transform.Find("point_recoil_rotate").position,
 				Vector3.up,
 				y_recoil_spring.state); 
 		}
@@ -1192,12 +1192,12 @@ public class AimScript : MonoBehaviour
 		held_flashlight.transform.rotation = flashlight_rot;
 		
 		held_flashlight.transform.RotateAround(
-			held_flashlight.transform.FindChild("point_recoil_rotate").position,
+			held_flashlight.transform.Find("point_recoil_rotate").position,
 			held_flashlight.transform.rotation * Vector3.right,
 			x_recoil_spring.state * 0.3f);
 		
 		held_flashlight.transform.RotateAround(
-			held_flashlight.transform.FindChild("point_recoil_rotate").position,
+			held_flashlight.transform.Find("point_recoil_rotate").position,
 			Vector3.up,
 			y_recoil_spring.state * 0.3f);
 		
@@ -1255,8 +1255,8 @@ public class AimScript : MonoBehaviour
 		if(gun_instance){
 			mag_pos = gun_instance.transform.position;
 			mag_rot = gun_instance.transform.rotation;
-			mag_pos += (gun_instance.transform.FindChild("point_mag_to_insert").position - 
-			            gun_instance.transform.FindChild("point_mag_inserted").position);
+			mag_pos += (gun_instance.transform.Find("point_mag_to_insert").position - 
+			            gun_instance.transform.Find("point_mag_inserted").position);
 		}
 		if(mag_stage == HandMagStage.HOLD || mag_stage == HandMagStage.HOLD_TO_INSERT){
 			var mag_script = magazine_instance_in_hand.GetComponent<mag_script>();
@@ -1313,7 +1313,7 @@ public class AimScript : MonoBehaviour
 			if(disable_springs){  
 				slot.obj.transform.position = mix(
 					start_pos, 
-					main_camera.transform.position + main_camera.camera.ScreenPointToRay(new Vector3(main_camera.camera.pixelWidth * (0.05f + i*0.15f), main_camera.camera.pixelHeight * 0.17f,0)).direction * 0.3f, 
+					main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(new Vector3(main_camera.GetComponent<Camera>().pixelWidth * (0.05f + i*0.15f), main_camera.GetComponent<Camera>().pixelHeight * 0.17f,0)).direction * 0.3f, 
 					slot.spring.target_state);
 				scale = 0.3f * slot.spring.target_state + (1.0f - slot.spring.target_state);
 				slot.obj.transform.localScale *= scale;
@@ -1324,7 +1324,7 @@ public class AimScript : MonoBehaviour
 			} else {  
 				slot.obj.transform.position = mix(
 					start_pos, 
-					main_camera.transform.position + main_camera.camera.ScreenPointToRay(new Vector3(main_camera.camera.pixelWidth * (0.05f + i*0.15f), main_camera.camera.pixelHeight * 0.17f,0)).direction * 0.3f, 
+					main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(new Vector3(main_camera.GetComponent<Camera>().pixelWidth * (0.05f + i*0.15f), main_camera.GetComponent<Camera>().pixelHeight * 0.17f,0)).direction * 0.3f, 
 					slot.spring.state);
 				scale = 0.3f * slot.spring.state + (1.0f - slot.spring.state);
 				slot.obj.transform.localScale *= scale; 
@@ -1335,7 +1335,7 @@ public class AimScript : MonoBehaviour
 			}
 			var renderers = slot.obj.GetComponentsInChildren<Renderer>();
 			foreach(Renderer renderer in renderers){
-				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
+				GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 			slot.spring.Update();
 		}
@@ -1355,7 +1355,7 @@ public class AimScript : MonoBehaviour
 			 Spring  spring = loose_bullet_spring[i];
 			spring.Update();
 			 GameObject  bullet = loose_bullets[i];
-			bullet.transform.position = main_camera.transform.position + main_camera.camera.ScreenPointToRay(new Vector3(0.0f, main_camera.camera.pixelHeight,0)).direction * 0.3f;
+			bullet.transform.position = main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(new Vector3(0.0f, main_camera.GetComponent<Camera>().pixelHeight,0)).direction * 0.3f;
 			bullet.transform.position += main_camera.transform.rotation * new Vector3(0.02f,-0.01f,0);
 			bullet.transform.position += main_camera.transform.rotation * new Vector3(0.006f * i,0.0f,0);
 			bullet.transform.position += main_camera.transform.rotation * new Vector3(-0.03f,0.03f,0) * (1.0f - show_bullet_spring.state);
@@ -1363,7 +1363,7 @@ public class AimScript : MonoBehaviour
 			bullet.transform.rotation = main_camera.transform.rotation * Quaternion.AngleAxis(90, Vector3.left);
 			var renderers = bullet.GetComponentsInChildren<Renderer>();
 			foreach (Renderer renderer in renderers){
-				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
+				GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 		}
 	}
@@ -1393,9 +1393,9 @@ public class AimScript : MonoBehaviour
 			if(!round){
 				continue;
 			}
-			round.rigidbody.velocity += (attract_pos - round.transform.position) * Time.deltaTime * 20.0f;
-			round.rigidbody.velocity *= Mathf.Pow(0.1f, Time.deltaTime);;
-			//round.rigidbody.position += round.rigidbody.velocity * Time.deltaTime;
+			round.GetComponent<Rigidbody>().velocity += (attract_pos - round.transform.position) * Time.deltaTime * 20.0f;
+			round.GetComponent<Rigidbody>().velocity *= Mathf.Pow(0.1f, Time.deltaTime);;
+			//round.GetComponent<Rigidbody>().position += round.GetComponent<Rigidbody>().velocity * Time.deltaTime;
 			if(Vector3.Distance(round.transform.position, attract_pos) < 0.5f){
 				if(round.gameObject.name == "cassette_tape(Clone)"){
 					++unplayed_tapes;

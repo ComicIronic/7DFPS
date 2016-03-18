@@ -16,7 +16,7 @@ public class ControllerDebugger : PlayerController {
 	
 	private string GetDebugData()
 	{
-		stringBuilder debugData = new stringBuilder();
+		StringBuilder debugData = new StringBuilder();
 		
 		if(Mathf.Abs(ControllerData.Joystick.X) > 0.01f)
 		{
@@ -38,6 +38,6 @@ public class ControllerDebugger : PlayerController {
 		debugData.Append(ControllerData.Buttons.Bumper ? " BumperButton" : "");
 		debugData.Append(ControllerData.Buttons.Joystick ? " JoyButton" : "");
 		
-		return debugData.Tostring();
+		return debugData.ToString();
 	}
 }

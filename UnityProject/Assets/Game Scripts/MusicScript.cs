@@ -44,10 +44,10 @@ public class MusicScript : MonoBehaviour
 	}
 	
 	void Start () {
-		music_sources = new AudioSource[music_layers.Count];
-		music_volume = new float[music_layers.Count];
-		target_gain = new float[music_layers.Count];
-		for(int i = 0; i<music_layers.Count; ++i){
+		music_sources = new AudioSource[music_layers.Length];
+		music_volume = new float[music_layers.Length];
+		target_gain = new float[music_layers.Length];
+		for(int i = 0; i<music_layers.Length; ++i){
 			AudioSource  source= gameObject.AddComponent<AudioSource>();
 			source.clip = music_layers[i];
 			music_sources[i] = source;
@@ -68,7 +68,7 @@ public class MusicScript : MonoBehaviour
 	void Update() { 
 		danger = Mathf.Max(danger_level_accumulate, danger);
 		danger_level_accumulate = 0.0f;
-		for(int i = 0; i<music_layers.Count; ++i){
+		for(int i = 0; i<music_layers.Length; ++i){
 			music_sources[i].volume = music_volume[i] * PlayerPrefs.GetFloat("music_volume");
 		}
 		sting_source.volume = PlayerPrefs.GetFloat("music_volume", 1.0f);
@@ -89,7 +89,7 @@ public class MusicScript : MonoBehaviour
 			}
 		}
 		
-		for(int i = 0; i<music_layers.Count; ++i){
+		for(int i = 0; i<music_layers.Length; ++i){
 			music_volume[i] = Mathf.Lerp(target_gain[i], music_volume[i], 0.99f) * global_gain;
 		}
 	}
