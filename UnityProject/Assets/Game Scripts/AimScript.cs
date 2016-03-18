@@ -10,11 +10,11 @@ public class AimScript : MonoBehaviour
 	private GameObject magazine_obj;
 	private GameObject gun_obj;
 	private GameObject casing_with_bullet;
-	 Texture texture_death_screen ;
-	
-	 AudioClip[] sound_bullet_grab ;
-	 AudioClip[] sound_body_fall ;
-	 AudioClip[] sound_electrocute ;
+	public Texture texture_death_screen ;
+
+    public AudioClip[] sound_bullet_grab;
+    public AudioClip[] sound_body_fall;
+    public AudioClip[] sound_electrocute;
 	
 	 AudioSource audiosource_tape_background ;
 	 AudioSource audiosource_audio_content ;
@@ -47,7 +47,8 @@ public class AimScript : MonoBehaviour
 	bool disable_recoil  = true;
 	
 	// Private variables
-	
+
+    [System.Serializable]
 	public class Spring {
 		 public float state ;
 		 public float target_state ;

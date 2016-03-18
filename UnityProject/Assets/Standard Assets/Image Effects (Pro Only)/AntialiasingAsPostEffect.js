@@ -99,19 +99,19 @@ class AntialiasingAsPostEffect extends PostEffectsBase  {
     function OnDisable()
     {
 		if(materialFXAAPreset2)
-		    Destroy(materialFXAAPreset2);
+		    DestroyImmediate(materialFXAAPreset2);
 		if(materialFXAAPreset3)
-    		Destroy(materialFXAAPreset3);
+		    DestroyImmediate(materialFXAAPreset3);
 		if(materialFXAAII)
-	    	Destroy(materialFXAAII);
+	    	DestroyImmediate(materialFXAAII);
 		if(materialFXAAIII)
-		    Destroy(materialFXAAIII);
+		    DestroyImmediate(materialFXAAIII);
 		if(nfaa)
-		    Destroy(nfaa);
+		    DestroyImmediate(nfaa);
 		if(ssaa)
-		    Destroy(ssaa);
+		    DestroyImmediate(ssaa);
 		if(dlaa)
-		    Destroy(dlaa);
+		    DestroyImmediate(dlaa);
     }
     
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {

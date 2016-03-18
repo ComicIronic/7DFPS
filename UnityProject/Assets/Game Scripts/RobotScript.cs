@@ -4,17 +4,17 @@ using Spring = AimScript.Spring;
 
 public class RobotScript : MonoBehaviour
 {
-	AudioClip[] sound_gunshot;
-	AudioClip[] sound_damage_camera;
-	AudioClip[] sound_damage_gun;
-	AudioClip[] sound_damage_battery;
-	AudioClip[] sound_damage_ammo;
-	AudioClip[] sound_damage_motor;
-	AudioClip[] sound_bump;
-	AudioClip sound_alert;
-	AudioClip sound_unalert;
-	AudioClip sound_engine_loop;
-	AudioClip sound_damaged_engine_loop;
+	public AudioClip[] sound_gunshot;
+    public AudioClip[] sound_damage_camera;
+    public AudioClip[] sound_damage_gun;
+    public AudioClip[] sound_damage_battery;
+    public AudioClip[] sound_damage_ammo;
+    public AudioClip[] sound_damage_motor;
+    public AudioClip[] sound_bump;
+    public AudioClip sound_alert;
+    public AudioClip sound_unalert;
+    public AudioClip sound_engine_loop;
+    public AudioClip sound_damaged_engine_loop;
 	
 	private AudioSource audiosource_taser;
 	private AudioSource audiosource_motor;
@@ -22,13 +22,13 @@ public class RobotScript : MonoBehaviour
 	private AudioSource audiosource_effect;
 	private AudioSource audiosource_foley;
 	private float sound_line_of_sight  = 0.0f;
+
+    public GameObject electric_spark_obj;
+    public GameObject muzzle_flash;
+    public GameObject bullet_obj;
 	
-	GameObject electric_spark_obj;
-	GameObject muzzle_flash;
-	GameObject bullet_obj;
-	
-	enum RobotType {SHOCK_DRONE, STATIONARY_TURRET, MOBILE_TURRET, GUN_DRONE};
-	RobotType robot_type;
+	public enum RobotType {SHOCK_DRONE, STATIONARY_TURRET, MOBILE_TURRET, GUN_DRONE};
+    public RobotType robot_type;
 	
 	private float gun_delay  = 0.0f;
 	private bool alive  = true;
@@ -63,10 +63,10 @@ public class RobotScript : MonoBehaviour
 	private float kSleepDistance  = 20.0f;
 	
 	Vector3 target_pos;
-	enum CameraPivotState {DOWN, WAIT_UP, UP, WAIT_DOWN};
-	CameraPivotState camera_pivot_state = CameraPivotState.WAIT_DOWN;
-	float camera_pivot_delay  = 0.0f;
-	float camera_pivot_angle  = 0.0f;
+    public enum CameraPivotState { DOWN, WAIT_UP, UP, WAIT_DOWN };
+    public CameraPivotState camera_pivot_state = CameraPivotState.WAIT_DOWN;
+    public float camera_pivot_delay = 0.0f;
+    public float camera_pivot_angle = 0.0f;
 	
 	GameObject GetTurretLightObject() {
 		return transform.Find("gun pivot").Find("camera").Find("light").gameObject;
@@ -256,7 +256,8 @@ public class RobotScript : MonoBehaviour
 			if(trigger_down){
 				if(gun_delay <= 0.0f){
 					gun_delay += 0.1f;
-					var point_muzzle_flash = gun_pivot.Find("gun").Find("point_muzzleflash");
+					var point_muzzle_flash = gun_pivot.Find("gun").Find("point_muzzleflash");
+
 					Instantiate(muzzle_flash, point_muzzle_flash.position, point_muzzle_flash.rotation);
 					this.PlaySoundFromGroup(sound_gunshot, 1.0f);
 					

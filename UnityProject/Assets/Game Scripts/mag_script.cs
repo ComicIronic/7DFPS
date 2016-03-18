@@ -6,15 +6,15 @@ public class mag_script : MonoBehaviour
 	public enum MagLoadStage {NONE, PUSHING_DOWN, ADDING_ROUND, REMOVING_ROUND, PUSHING_UP};
 
 	private int num_rounds = 8;
-	private int kMaxRounds = 8;
+	public int kMaxRounds = 8;
 	private Vector3[] round_pos;
 	private Quaternion[] round_rot;
 	private Vector3 old_pos;
 	public Vector3 hold_offset;
 	public Vector3 hold_rotation;
 	bool collided = false;
-	AudioClip[] sound_add_round;
-	AudioClip[] sound_mag_bounce;
+	public AudioClip[] sound_add_round;
+	public AudioClip[] sound_mag_bounce;
 	float life_time = 0.0f;
 
 	MagLoadStage mag_load_stage = MagLoadStage.NONE;

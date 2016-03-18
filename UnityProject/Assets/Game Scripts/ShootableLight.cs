@@ -4,8 +4,8 @@ using System.Collections;
 public class ShootableLight : MonoBehaviour
 {
 	
-	GameObject destroy_effect;
-	Color light_color = new Color(1,1,1);
+	public GameObject destroy_effect;
+	public Color light_color = new Color(1,1,1);
 	bool destroyed  = false;
 	public enum LightType {AIRPLANE_BLINK, NORMAL, FLICKER}
 	public LightType light_type = LightType.NORMAL;

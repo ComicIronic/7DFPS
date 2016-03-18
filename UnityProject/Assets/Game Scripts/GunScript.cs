@@ -11,24 +11,24 @@ public class GunScript : MonoBehaviour
 	public GunType gun_type;
 
 	public ActionType action_type;
-	
-	AudioClip[] sound_gunshot_bigroom;
-	AudioClip[] sound_gunshot_smallroom;
-	AudioClip[] sound_gunshot_open;
-	AudioClip[] sound_mag_eject_button;
-	AudioClip[] sound_mag_ejection;
-	AudioClip[] sound_mag_insertion;
-	AudioClip[] sound_slide_back;
-	AudioClip[] sound_slide_front;
-	AudioClip[] sound_safety;
-	AudioClip[] sound_bullet_eject;
-	AudioClip[] sound_cylinder_open;
-	AudioClip[] sound_cylinder_close;
-	AudioClip[] sound_extractor_rod_open;
-	AudioClip[] sound_extractor_rod_close;
-	AudioClip[] sound_cylinder_rotate;
-	AudioClip[] sound_hammer_cock;
-	AudioClip[] sound_hammer_decock;
+
+    public AudioClip[] sound_gunshot_bigroom;
+    public AudioClip[] sound_gunshot_smallroom;
+    public AudioClip[] sound_gunshot_open;
+    public AudioClip[] sound_mag_eject_button;
+    public AudioClip[] sound_mag_ejection;
+    public AudioClip[] sound_mag_insertion;
+    public AudioClip[] sound_slide_back;
+    public AudioClip[] sound_slide_front;
+    public AudioClip[] sound_safety;
+    public AudioClip[] sound_bullet_eject;
+    public AudioClip[] sound_cylinder_open;
+    public AudioClip[] sound_cylinder_close;
+    public AudioClip[] sound_extractor_rod_open;
+    public AudioClip[] sound_extractor_rod_close;
+    public AudioClip[] sound_cylinder_rotate;
+    public AudioClip[] sound_hammer_cock;
+    public AudioClip[] sound_hammer_decock;
 	
 	private float kGunMechanicVolume  = 0.2f;
 	
@@ -40,14 +40,14 @@ public class GunScript : MonoBehaviour
 	
 	Vector3 old_pos;
 	Vector3 velocity;
-	
-	GameObject magazine_obj;
-	
-	GameObject bullet_obj;
-	GameObject muzzle_flash;
-	
-	GameObject shell_casing;
-	GameObject casing_with_bullet;
+
+    public GameObject magazine_obj;
+
+    public GameObject bullet_obj;
+    public GameObject muzzle_flash;
+
+    public GameObject shell_casing;
+    public GameObject casing_with_bullet;
 	public bool ready_to_remove_mag  = false;
 	
 	enum PressureState {NONE, INITIAL, CONTINUING};

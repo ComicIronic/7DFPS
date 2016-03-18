@@ -14,20 +14,20 @@ public class CharacterMotor : MonoBehaviour
 	private float step_timer  = 0.0f;
 	private float head_bob  = 0.0f;
 	
-	 AudioClip[] sound_footstep_jump_concrete ;
-	 AudioClip[] sound_footstep_run_concrete ;
-	 AudioClip[] sound_footstep_walk_concrete ;
-	 AudioClip[] sound_footstep_crouchwalk_concrete ;
+	public AudioClip[] sound_footstep_jump_concrete ;
+    public AudioClip[] sound_footstep_run_concrete;
+    public AudioClip[] sound_footstep_walk_concrete;
+    public AudioClip[] sound_footstep_crouchwalk_concrete;
 	
 	float running  = 0.0f;
-	
-	Spring height_spring = new Spring(0,0,100,0.00001f);
+
+    public Spring height_spring = new Spring(0, 0, 100, 0.00001f);
 	 Vector3 die_dir ;
 	
 	// Does this script currently respond to input?
-	bool canControl = true;
-	
-	bool useFixedUpdate = true;
+    public bool canControl = true;
+
+    public bool useFixedUpdate = true;
 	
 	// For the next variables, [NonSerialized] tells Unity to not serialize the variable or show it in the inspector view.
 	// Very handy for organization!
@@ -48,10 +48,12 @@ public class CharacterMotor : MonoBehaviour
 	public float GetRunning() {
 		return running;
 	}
-	
-	class CharacterMotorMovement {
+
+    [System.Serializable]
+    public class CharacterMotorMovement
+    {
 		// The maximum horizontal speed when moving
-		 public float  maxForwardSpeed = 10.0f;
+		public float  maxForwardSpeed = 10.0f;
 		public float  maxSidewaysSpeed = 10.0f;
 		public float  maxBackwardsSpeed = 10.0f;
 		
@@ -87,10 +89,11 @@ public class CharacterMotor : MonoBehaviour
 		[NonSerialized]
 			public Vector3 lastHitPoint = new Vector3(Mathf.Infinity, 0, 0);
 	}
-	
-	 CharacterMotorMovement movement = new CharacterMotorMovement();
-	
-	enum MovementTransferOnJump {
+
+    public CharacterMotorMovement movement = new CharacterMotorMovement();
+
+    public enum MovementTransferOnJump
+    {
 		None, // The jump is not affected by velocity of floor at all.
 		InitTransfer, // Jump gets its initial velocity from the floor, then gradualy comes to a stop.
 		PermaTransfer, // Jump gets its initial velocity from the floor, and keeps that velocity until landing.
@@ -98,7 +101,9 @@ public class CharacterMotor : MonoBehaviour
 	}
 	
 	// We will contain all the jumping related variables in one helper class for clarity.
-	class CharacterMotorJumping {
+    [System.Serializable]
+    public class CharacterMotorJumping
+    {
 		// Can the character jump?
 		 public bool  enabled = true;
 		
@@ -137,13 +142,15 @@ public class CharacterMotor : MonoBehaviour
 		[NonSerialized]
 			 public Vector3  jumpDir = Vector3.up;
 	}
-	
-	 CharacterMotorJumping  jumping = new CharacterMotorJumping();
-	
-	class CharacterMotorMovingPlatform {
+
+    public CharacterMotorJumping jumping = new CharacterMotorJumping();
+
+    [System.Serializable]
+    public class CharacterMotorMovingPlatform
+    {
 		public bool  enabled = true;
 		
-		public MovementTransferOnJump  movementTransfer = MovementTransferOnJump.PermaTransfer;
+		public MovementTransferOnJump movementTransfer = MovementTransferOnJump.PermaTransfer;
 		
 		[NonSerialized]
 			 public Transform hitPlatform ;
@@ -172,10 +179,12 @@ public class CharacterMotor : MonoBehaviour
 		[NonSerialized]
 		public bool newPlatform ;
 	}
-	
-	 CharacterMotorMovingPlatform  movingPlatform = new CharacterMotorMovingPlatform();
-	
-	class CharacterMotorSliding {
+
+    public CharacterMotorMovingPlatform movingPlatform = new CharacterMotorMovingPlatform();
+
+    [System.Serializable]
+    public class CharacterMotorSliding
+    {
 		// Does the character slide on too steep surfaces?
 		public bool  enabled = true;
 		
@@ -190,8 +199,8 @@ public class CharacterMotor : MonoBehaviour
 		// If the value is 0.5f the player can speed the sliding up to 150% or slow it down to 50%.
 		public float  speedControl = 0.4f;
 	}
-	
-	 CharacterMotorSliding  sliding = new CharacterMotorSliding();
+
+    public CharacterMotorSliding sliding = new CharacterMotorSliding();
 	
 	[NonSerialized]
 		 bool grounded = true;

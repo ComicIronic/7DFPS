@@ -3,19 +3,19 @@ using System.Collections;
 
 public class BulletScript : MonoBehaviour
 {
-	AudioClip[] sound_hit_concrete;
-	AudioClip[] sound_hit_metal;
-	AudioClip[] sound_hit_glass;
-	AudioClip[] sound_hit_body;
-	AudioClip[] sound_hit_ricochet;
-	AudioClip[] sound_glass_break;
-	AudioClip[] sound_flyby;
-	GameObject bullet_obj;
-	GameObject bullet_hole_obj;
-	GameObject glass_bullet_hole_obj;
-	GameObject metal_bullet_hole_obj;
-	GameObject spark_effect;
-	GameObject puff_effect;
+	public AudioClip[] sound_hit_concrete;
+    public AudioClip[] sound_hit_metal;
+    public AudioClip[] sound_hit_glass;
+    public AudioClip[] sound_hit_body;
+    public AudioClip[] sound_hit_ricochet;
+    public AudioClip[] sound_glass_break;
+    public AudioClip[] sound_flyby;
+	public GameObject bullet_obj;
+    public GameObject bullet_hole_obj;
+    public GameObject glass_bullet_hole_obj;
+    public GameObject metal_bullet_hole_obj;
+    public GameObject spark_effect;
+    public GameObject puff_effect;
 	private Vector3 old_pos;
 	private bool hit_something = false;
 	private LineRenderer line_renderer; 

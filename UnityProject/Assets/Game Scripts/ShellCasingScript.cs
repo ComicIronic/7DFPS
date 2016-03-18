@@ -3,8 +3,8 @@ using System.Collections;
 
 public class ShellCasingScript : MonoBehaviour
 {
-	AudioClip[] sound_shell_bounce;
-	public bool collided  = false;
+	public AudioClip[] sound_shell_bounce;
+    public bool collided = false;
 	Vector3 old_pos;
 	float life_time  = 0.0f;
 	float glint_delay  = 0.0f;

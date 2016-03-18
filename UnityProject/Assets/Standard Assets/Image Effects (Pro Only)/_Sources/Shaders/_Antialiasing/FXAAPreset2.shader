@@ -749,7 +749,7 @@ Position on span is used to compute sub-pixel filter offset using simple ramp,
               |\             |<------- 0.5 pixel offset into pair pixel
               | \            |
               |  \           |
-    ---.......|...\..........|<------- 0.25 pixel offset into pair pixel
+    ---.......|.............|<------- 0.25 pixel offset into pair pixel
      ^        |   ^\         |
      |        |   | \        |
      V        |   |  \       |
