@@ -199,7 +199,7 @@ public class GunScript : MonoBehaviour
 			
 			var renderers = magazine_instance_in_gun.GetComponentsInChildren<Renderer>();
 			foreach(Renderer renderer in renderers){
-				GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
+				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 			
 			if(Random.Range(0,2) == 0){

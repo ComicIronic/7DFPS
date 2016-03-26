@@ -302,7 +302,7 @@ public class AimScript : MonoBehaviour
 		gun_instance = (GameObject)Instantiate(gun_obj);
 		var renderers = gun_instance.GetComponentsInChildren<Renderer>();
 		foreach(Renderer renderer in renderers){
-			GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
+			renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 		}
 		main_camera = GameObject.Find("Main Camera").gameObject;
 		character_controller = GetComponent<CharacterController>();
@@ -1336,7 +1336,7 @@ public class AimScript : MonoBehaviour
 			}
 			var renderers = slot.obj.GetComponentsInChildren<Renderer>();
 			foreach(Renderer renderer in renderers){
-				GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
+				renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; 
 			}
 			slot.spring.Update();
 		}
