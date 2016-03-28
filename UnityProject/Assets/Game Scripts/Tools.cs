@@ -61,6 +61,27 @@ public static class Tools
 		return element;
 	}
 
+    public static Transform FindDeepChild(this Transform parent, string name)
+    {
+        foreach (Transform child in parent.transform)
+        {
+            if (child.name == name)
+            {
+                return child;
+            }
+            else
+            {
+                Transform found = child.FindDeepChild(name);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+        }
+
+        return null;
+    }
+
 	public static Vector3 SetDimension(Vector3 vector, char dimension, float value) {
 		switch(dimension) {
 			case 'x' : return new Vector3(dimension, vector.y, vector.z);
